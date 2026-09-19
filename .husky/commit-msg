@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -eu
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+. "$REPO_ROOT/bin/git-hooks/functions.sh"
+
+commit_message_file="$1"
+show_hook_section 'Commit message hook'
+run_package_binary commitlint --edit "$commit_message_file"

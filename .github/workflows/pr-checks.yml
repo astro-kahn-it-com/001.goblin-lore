@@ -1,0 +1,62 @@
+# ─────────────────────────────────────────────────────────────
+# WORKFLOW: PR Checks (basic, standalone)
+#
+# A minimal self-contained pipeline for this npm consumer repo. Unlike the
+# snailicid3 monorepo callers, this does NOT reference the reusable
+# gbtunney/snailicid3-actions/.github/workflows/call-*.yml workflows — it runs
+# npm scripts directly so the repo can be validated on its own.
+#
+# Runs on every PR into `main` and answers: "does this change build and pass?"
+#   - build       (required)
+#   - test        (if the script is present)
+#   - docs:build  (if the script is present)
+#   - api:check   (if the script is present)
+# ─────────────────────────────────────────────────────────────
+name: PR Checks
+
+on:
+    pull_request:
+        branches:
+            - main
+    workflow_dispatch:
+
+concurrency:
+    group: pr-${{ github.event.pull_request.number || github.ref_name }}
+    cancel-in-progress: true
+
+permissions:
+    contents: read
+
+env:
+    HUSKY: 0
+
+jobs:
+    checks:
+        name: build & checks
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.event_name == 'pull_request' && format('refs/pull/{0}/merge', github.event.pull_request.number) || github.ref }}
+
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+                  cache: npm
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Build
+              run: npm run build
+
+            - name: Test
+              run: npm run test --if-present
+
+            - name: Docs build
+              run: npm run docs:build --if-present
+
+            - name: API check
+              run: npm run api:check --if-present

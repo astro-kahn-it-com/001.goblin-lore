@@ -1,0 +1,56 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "worker-narrator",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-01-07",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true,
+  },
+
+  "ai": {
+    "binding": "AI",
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "AGENT_SESSION",
+        "class_name": "AgentSessionDO",
+      },
+    ],
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["AgentSessionDO"],
+    },
+  ],
+  "alias": {
+    "ajv": "../../node_modules/@funtuantw/pi-agent-cf/stubs/ajv.js",
+  },
+
+  // STAGING ENVIRONMENT
+  // 🔴 FIX: You must explicitly list ALL bindings here too.
+  "env": {
+    "staging": {
+      "name": "worker-narrator",
+      "ai": {
+        "binding": "AI",
+      },
+      "durable_objects": {
+        "bindings": [
+          {
+            "name": "AGENT_SESSION",
+            "class_name": "AgentSessionDO",
+          },
+        ],
+      },
+      "migrations": [
+        {
+          "tag": "v1",
+          "new_sqlite_classes": ["AgentSessionDO"],
+        },
+      ],
+    },
+  },
+}

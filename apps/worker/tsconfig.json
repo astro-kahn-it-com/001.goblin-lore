@@ -1,0 +1,16 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "./dist",
+        "rootDir": ".",
+        "composite": true,
+        "target": "esnext",
+        "lib": ["esnext", "webworker"],
+        "types": [
+            "@cloudflare/workers-types",
+            "@cloudflare/vitest-pool-workers"
+        ]
+    },
+    "include": ["src", "test", "vitest.config.ts", "worker-configuration.d.ts"],
+    "references": []
+}
