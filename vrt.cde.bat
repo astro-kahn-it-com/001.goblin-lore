@@ -1,3 +1,3 @@
 cd..
 cd vcode-debug
-start Code.exe ../npm-worker-00
+start Code.exe ../npm-worker-01
