@@ -25,12 +25,12 @@
         "build:force": "npm run build --workspaces --if-present --force",
         "//__ 🐊 TESTING ______________________": "",
         "test": "npm run test:worker && npm run test:sower",
-        "test:worker": "npm run test --workspace=@camp_candor/worker",
+        "test:worker": "npm run test --workspace=@camp_candor/agent",
         "test:sower": "npm run test --workspace=@camp_candor/995.library",
         "test:agent": "npm run test --workspace=@camp_candor/000.agent",
-        "test:audit": "npm run test:audit --workspace=@camp_candor/worker",
-        "audit:local": "npm run test:audit:local --workspace=@camp_candor/worker",
-        "audit:staging": "npm run test:audit:staging --workspace=@camp_candor/worker",
+        "test:audit": "npm run test:audit --workspace=@camp_candor/agent",
+        "audit:local": "npm run test:audit:local --workspace=@camp_candor/agent",
+        "audit:staging": "npm run test:audit:staging --workspace=@camp_candor/agent",
         "verify:local": "start-server-and-test dev http://127.0.0.1:8787 audit:local",
         "//__ 🛠️ MAINTENANCE ______________________": "",
         "prepare": "husky",
@@ -55,7 +55,7 @@
         "uninstall": "npm run clean && rm -f package-lock.json && find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +",
         "reset": "npm run uninstall && npm install && npm run build",
         "//__ 🚢 SHIP ____________________________": "",
-        "ship": "npm run build && npm run deploy --workspace=@camp_candor/worker -- --env staging && npm run audit:staging"
+        "ship": "npm run build && npm run deploy --workspace=@camp_candor/agent -- --env staging && npm run audit:staging"
     },
     "lint-staged": {
         "*.{js,ts,tsx,json,css,md}": [

@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "npm-worker-01",
+  "name": "npm-agent-01",
   "main": "src/index.ts",
   "compatibility_date": "2026-01-07",
   "compatibility_flags": [
@@ -35,7 +35,7 @@
   // 🔴 FIX: You must explicitly list ALL bindings here too.
   "env": {
     "staging": {
-      "name": "npm-worker-01",
+      "name": "npm-agent-01",
       "ai": {
         "binding": "AI",
       },

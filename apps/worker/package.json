@@ -1,5 +1,5 @@
 {
-    "name": "@camp_candor/worker",
+    "name": "@camp_candor/agent",
     "version": "0.0.1",
     "private": true,
     "type": "module",

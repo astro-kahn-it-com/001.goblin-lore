@@ -118,7 +118,7 @@ export const testAgent = async (cpy: AgentModel, bal: AgentBit, ste: State) => {
 
     // Use --run to avoid watch mode and --no-color to avoid ANSI codes
     exec(
-        'npm test --workspace=@camp_candor/worker -- --run --no-color',
+        'npm test --workspace=@camp_candor/agent -- --run --no-color',
         { maxBuffer: 1024 * 1024 },
         (err, stdout, stderr) => {
             let src = ''

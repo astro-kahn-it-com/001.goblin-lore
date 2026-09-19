@@ -27,7 +27,7 @@ layer.
 ```text
 .
 ├── apps/
-│   ├── worker/              # Cloudflare Worker (@camp_candor/worker)
+│   ├── worker/              # Cloudflare Worker (@camp_candor/agent)
 │   │   ├── src/             # Hono router + pi-agent-cf orchestration + DO
 │   │   ├── test/            # Vitest worker pool unit tests & audit tests
 │   │   └── wrangler.jsonc   # Cloudflare Worker & Durable Object bindings
@@ -50,7 +50,7 @@ layer.
 
 | Workspace            | Package Name               | Primary Role                  | Tech Stack                                                          |
 | :------------------- | :------------------------- | :---------------------------- | :------------------------------------------------------------------ |
-| `apps/worker`        | `@camp_candor/worker`      | Cloudflare Worker AI Agent    | Hono, `@funtuantw/pi-agent-cf`, Durable Objects, SQLite, Workers AI |
+| `apps/worker`        | `@camp_candor/agent`       | Cloudflare Worker AI Agent    | Hono, `@funtuantw/pi-agent-cf`, Durable Objects, SQLite, Workers AI |
 | `apps/995.library`   | `@camp_candor/995.library` | CLI & Runner Harness          | TypeScript, TSX, Blessed / Terminal UI, Neo4j driver, AVA           |
 | `packages/000.agent` | `@camp_candor/000.agent`   | Agent Unit Primitives & State | Unit-based Redux/Buzzer pattern, TypeBox, Vitest                    |
 
