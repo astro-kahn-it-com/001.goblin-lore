@@ -36,6 +36,6 @@ jobs:
 
             # 4. AUDIT
             - name: Run Live Audit
-              run: npm run test:audit:staging --workspace=@camp_candor/worker
+              run: npm run test:audit:staging --workspace=@camp_candor/agent
               env:
                   STAGING_URL: https://worker-agent.berad4000.workers.dev
