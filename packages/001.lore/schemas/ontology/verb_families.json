@@ -1,0 +1,65 @@
+{
+  "$schema": "[https://json-schema.org/draft/2020-12/schema](https://json-schema.org/draft/2020-12/schema)",
+  "version": "1.1.0",
+  "families": {
+    "LOCOMOTION_RAPID": {
+      "capability_required": "bipedal_sprint",
+      "banned_if_conditions": [
+        "famished",
+        "stiff_left_knee",
+        "neuropathy",
+        "broken_leg"
+      ],
+      "verbs": [
+        "sprint",
+        "dash",
+        "vault",
+        "scramble",
+        "scurry",
+        "bound",
+        "gallop",
+        "race",
+        "bolt",
+        "leap"
+      ],
+      "contextual_abstract_whitelist": [
+        "mind",
+        "thoughts",
+        "memory",
+        "pulse",
+        "imagination"
+      ]
+    },
+    "BIMANUAL_GRIP": {
+      "capability_required": "two_functional_arms",
+      "banned_if_conditions": [
+        "severed_left_arm",
+        "withered_left_arm",
+        "withered_ear",
+        "radial_fracture"
+      ],
+      "verbs": [
+        "clutch",
+        "grip",
+        "climb",
+        "hoist",
+        "wield_two_handed",
+        "shimmy",
+        "embrace",
+        "strangle"
+      ],
+      "contextual_abstract_whitelist": [
+        "fate",
+        "destiny",
+        "silence",
+        "shadow",
+        "thought",
+        "memory",
+        "concept",
+        "grief",
+        "terror",
+        "tradition"
+      ]
+    }
+  }
+}

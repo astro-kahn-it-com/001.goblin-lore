@@ -1,0 +1,152 @@
+[
+  {
+    "id": "neg_01",
+    "category": "negation",
+    "text": "Bog reached for the ladder but could not climb the rungs.",
+    "character": "char_bog",
+    "banned_family": "BIMANUAL_GRIP",
+    "banned_verb": "climb",
+    "expected_verdict": "PASS",
+    "rationale": "Governed by modal negation 'could not'."
+  },
+  {
+    "id": "neg_02",
+    "category": "negation",
+    "text": "Spleen was completely unable to vault over the hot copper pipe.",
+    "character": "char_spleen",
+    "banned_family": "LOCOMOTION_RAPID",
+    "banned_verb": "vault",
+    "expected_verdict": "PASS",
+    "rationale": "Governed by 'unable to'."
+  },
+  {
+    "id": "neg_03",
+    "category": "negation",
+    "text": "Bog tried with all his might, but failed to grip the grease-coated silver spoon.",
+    "character": "char_bog",
+    "banned_family": "BIMANUAL_GRIP",
+    "banned_verb": "grip",
+    "expected_verdict": "PASS",
+    "rationale": "Governed by 'failed to'."
+  },
+  {
+    "id": "neg_04",
+    "category": "negation",
+    "text": "Spleen never sprinted across the open attic gap in daylight.",
+    "character": "char_spleen",
+    "banned_family": "LOCOMOTION_RAPID",
+    "banned_verb": "sprint",
+    "expected_verdict": "PASS",
+    "rationale": "Governed by negative adverb 'never'."
+  },
+  {
+    "id": "neg_05",
+    "category": "negation",
+    "text": "Bog retreated slowly without sprinting towards the splintered baseboards.",
+    "character": "char_bog",
+    "banned_family": "LOCOMOTION_RAPID",
+    "banned_verb": "sprint",
+    "expected_verdict": "PASS",
+    "rationale": "Governed by prepositional negation 'without'."
+  },
+  {
+    "id": "aff_01",
+    "category": "affirmative",
+    "text": "Bog scrambled up the pantry pipe without hesitation.",
+    "character": "char_bog",
+    "banned_family": "LOCOMOTION_RAPID",
+    "banned_verb": "scramble",
+    "expected_verdict": "FAIL",
+    "rationale": "Affirmative execution of banned locomotion."
+  },
+  {
+    "id": "aff_02",
+    "category": "affirmative",
+    "text": "Spleen vaulted onto the beam and hissed at the spider.",
+    "character": "char_spleen",
+    "banned_family": "LOCOMOTION_RAPID",
+    "banned_verb": "vault",
+    "expected_verdict": "FAIL",
+    "rationale": "Affirmative execution of banned verb."
+  },
+  {
+    "id": "aff_03",
+    "category": "affirmative",
+    "text": "Bog gripped the cold water valve with both hands.",
+    "character": "char_bog",
+    "banned_family": "BIMANUAL_GRIP",
+    "banned_verb": "grip",
+    "expected_verdict": "FAIL",
+    "rationale": "Affirmative bimanual action on physical object."
+  },
+  {
+    "id": "aff_04",
+    "category": "affirmative",
+    "text": "Spleen dashed through the dark tunnel to escape the boot.",
+    "character": "char_spleen",
+    "banned_family": "LOCOMOTION_RAPID",
+    "banned_verb": "dash",
+    "expected_verdict": "FAIL",
+    "rationale": "Affirmative rapid locomotion breach."
+  },
+  {
+    "id": "aff_05",
+    "category": "affirmative",
+    "text": "Bog climbed the splintered wooden post to check the ceiling gap.",
+    "character": "char_bog",
+    "banned_family": "BIMANUAL_GRIP",
+    "banned_verb": "climb",
+    "expected_verdict": "FAIL",
+    "rationale": "Affirmative climb breach."
+  },
+  {
+    "id": "idiom_01",
+    "category": "idiom",
+    "text": "Bog embraced his grim fate as the heating season ended.",
+    "character": "char_bog",
+    "banned_family": "BIMANUAL_GRIP",
+    "banned_verb": "embrace",
+    "expected_verdict": "PASS",
+    "rationale": "Cognitive direct object 'fate' whitelisted."
+  },
+  {
+    "id": "idiom_02",
+    "category": "idiom",
+    "text": "Spleen let his mind scramble through every memory of the feast.",
+    "character": "char_spleen",
+    "banned_family": "LOCOMOTION_RAPID",
+    "banned_verb": "scramble",
+    "expected_verdict": "PASS",
+    "rationale": "Cognitive metaphor whitelisted via 'memory'."
+  },
+  {
+    "id": "idiom_03",
+    "category": "idiom",
+    "text": "Bog clutched the painful memory close to his chest.",
+    "character": "char_bog",
+    "banned_family": "BIMANUAL_GRIP",
+    "banned_verb": "clutch",
+    "expected_verdict": "PASS",
+    "rationale": "Abstract target 'memory' whitelisted."
+  },
+  {
+    "id": "ambig_01",
+    "category": "passive_causative",
+    "text": "A shadowed figure bolted past the trapdoor.",
+    "character": "char_bog",
+    "banned_family": "LOCOMOTION_RAPID",
+    "banned_verb": "bolt",
+    "expected_verdict": "FAIL",
+    "rationale": "Ambiguous subject coreference 'figure' must fail closed."
+  },
+  {
+    "id": "ambig_02",
+    "category": "passive_causative",
+    "text": "Someone scrambled across the rafters in the pitch black.",
+    "character": "char_spleen",
+    "banned_family": "LOCOMOTION_RAPID",
+    "banned_verb": "scramble",
+    "expected_verdict": "FAIL",
+    "rationale": "Ambiguous pronoun 'someone' must fail closed."
+  }
+]
