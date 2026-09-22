@@ -1,0 +1,9 @@
+{
+    "series_id": "under-the-floorboards",
+    "title": "Under the Floorboards",
+    "version": "1.0.0",
+    "modal_parameters": {
+        "scarcity_index": 9200,
+        "paranoia_baseline": 7500
+    }
+}
