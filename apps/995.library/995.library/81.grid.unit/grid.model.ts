@@ -1,8 +1,8 @@
-import type Grid from './fce/grid.interface'
-import GridBit from './fce/grid.interface'
+import type Grid from './fce/grid.interface';
+import GridBit from './fce/grid.interface';
 
 export class GridModel implements Grid {
-    //idx:string;
-    //gridBitList: GridBit[] = [];
-    //gridBits: any = {};
+  //idx:string;
+  //gridBitList: GridBit[] = [];
+  //gridBits: any = {};
 }

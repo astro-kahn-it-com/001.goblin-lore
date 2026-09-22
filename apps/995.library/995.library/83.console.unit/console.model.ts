@@ -1,8 +1,8 @@
-import type Console from './fce/console.interface'
-import ConsoleBit from './fce/console.interface'
+import type Console from './fce/console.interface';
+import ConsoleBit from './fce/console.interface';
 
 export class ConsoleModel implements Console {
-    //idx:string;
-    //consoleBitList: ConsoleBit[] = [];
-    //consoleBits: any = {};
+  //idx:string;
+  //consoleBitList: ConsoleBit[] = [];
+  //consoleBits: any = {};
 }

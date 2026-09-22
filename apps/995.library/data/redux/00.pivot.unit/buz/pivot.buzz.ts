@@ -1,12 +1,12 @@
 export const initPivot = (cpy: PivotModel, bal: PivotBit, ste: State) => {
-    debugger
-    return cpy
-}
+  debugger;
+  return cpy;
+};
 
 export const updatePivot = (cpy: PivotModel, bal: PivotBit, ste: State) => {
-    return cpy
-}
+  return cpy;
+};
 
-import type { PivotModel } from '../pivot.model'
-import type PivotBit from '../fce/pivot.bit'
-import type State from '../../99.core/state'
+import type { PivotModel } from '../pivot.model';
+import type PivotBit from '../fce/pivot.bit';
+import type State from '../../99.core/state';

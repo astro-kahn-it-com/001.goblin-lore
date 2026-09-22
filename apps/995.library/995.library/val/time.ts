@@ -1,1 +1,1 @@
-export const CLOCK = 'clock'
+export const CLOCK = 'clock';

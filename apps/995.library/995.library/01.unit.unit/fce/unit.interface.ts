@@ -1,7 +1,7 @@
-import UnitBit from './unit.bit'
+import UnitBit from './unit.bit';
 
 export default interface Unit {
-    // idx:string;
-    // unitBitList: UnitBit[];
-    // unitBits: any;
+  // idx:string;
+  // unitBitList: UnitBit[];
+  // unitBits: any;
 }

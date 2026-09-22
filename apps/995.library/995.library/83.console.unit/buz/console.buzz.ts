@@ -1,139 +1,113 @@
-let bit
+let bit;
 
-import * as ActCns from '../console.action'
+import * as ActCns from '../console.action';
 
-import * as ActCol from '../../97.collect.unit/collect.action'
+import * as ActCol from '../../97.collect.unit/collect.action';
 
 export const initConsole = (cpy: ConsoleModel, bal: ConsoleBit, ste: State) => {
-    debugger
-    return cpy
-}
+  debugger;
+  return cpy;
+};
 
-export const updateConsole = async (
-    cpy: ConsoleModel,
-    bal: ConsoleBit,
-    ste: State,
-) => {
-    bit = await ste.hunt(ActCns.READ_CONSOLE, { idx: bal.idx })
-    const dat: TermBit = bit.cnsBit.dat
+export const updateConsole = async (cpy: ConsoleModel, bal: ConsoleBit, ste: State) => {
+  bit = await ste.hunt(ActCns.READ_CONSOLE, { idx: bal.idx });
+  const dat: TermBit = bit.cnsBit.dat;
 
-    const console = dat.bit
+  const console = dat.bit;
 
-    if (bal.src == null) bal.src = ''
+  if (bal.src == null) bal.src = '';
 
-    dat.bit
-    bal.src
+  dat.bit;
+  bal.src;
 
-    dat.bit.log(bal.src)
+  dat.bit.log(bal.src);
 
-    const terminal: TerminalModel = ste.value.terminal
-    if (terminal && terminal.screen) {
-        terminal.screen.render()
-    }
+  const terminal: TerminalModel = ste.value.terminal;
+  if (terminal && terminal.screen) {
+    terminal.screen.render();
+  }
 
-    if (bal.slv != null) bal.slv({ cnsBit: { idx: 'update-console' } })
+  if (bal.slv != null) bal.slv({ cnsBit: { idx: 'update-console' } });
 
-    return cpy
-}
+  return cpy;
+};
 
-export const createConsole = (
-    cpy: ConsoleModel,
-    bal: ConsoleBit,
-    ste: State,
-) => {
-    const termMod: TerminalModel = ste.value.terminal
+export const createConsole = (cpy: ConsoleModel, bal: ConsoleBit, ste: State) => {
+  const termMod: TerminalModel = ste.value.terminal;
 
-    const contrib = ste.value.terminal.contrib
+  const contrib = ste.value.terminal.contrib;
 
-    const dat: TermBit = { idx: 'hmm', bit: null, clr: null, net: null }
+  const dat: TermBit = { idx: 'hmm', bit: null, clr: null, net: null };
 
-    if (dat.clr == null) dat.clr = COLOR.GREEN
+  if (dat.clr == null) dat.clr = COLOR.GREEN;
 
-    for (const key in bal.dat) {
-        dat[key] = bal.dat[key]
-    }
+  for (const key in bal.dat) {
+    dat[key] = bal.dat[key];
+  }
 
-    dat.bit = contrib.log({
-        fg: dat.clr,
-        selectedFg: dat.clr,
-        label: 'Console Log',
-        left: dat.net.left,
-        top: dat.net.top,
-        width: dat.net.width,
-        height: dat.net.height,
-        bufferLength: 1000,
-        scrollable: true,
-        alwaysScroll: true,
-        keys: true,
-        mouse: true,
-    })
+  dat.bit = contrib.log({
+    fg: dat.clr,
+    selectedFg: dat.clr,
+    label: 'Console Log',
+    left: dat.net.left,
+    top: dat.net.top,
+    width: dat.net.width,
+    height: dat.net.height,
+    bufferLength: 1000,
+    scrollable: true,
+    alwaysScroll: true,
+    keys: true,
+    mouse: true,
+  });
 
-    const terminal: TerminalModel = ste.value.terminal
-    const screen = terminal.screen
-    screen.append(dat.bit)
+  const terminal: TerminalModel = ste.value.terminal;
+  const screen = terminal.screen;
+  screen.append(dat.bit);
 
-    screen.render()
+  screen.render();
 
-    if (bal.slv != null) bal.slv({ cnsBit: { idx: 'create-console', dat } })
+  if (bal.slv != null) bal.slv({ cnsBit: { idx: 'create-console', dat } });
 
-    return cpy
-}
+  return cpy;
+};
 
-export const readConsole = async (
-    cpy: ConsoleModel,
-    bal: ConsoleBit,
-    ste: State,
-) => {
-    const slv = bal.slv
-    if (bal.idx == null) bal.idx = 'can00'
-    bit = await ste.hunt(ActCol.READ_COLLECT, {
-        idx: bal.idx,
-        bit: ActCns.CREATE_CONSOLE,
-    })
-    if (slv != null)
-        slv({ cnsBit: { idx: 'read-console', dat: bit.clcBit.dat } })
+export const readConsole = async (cpy: ConsoleModel, bal: ConsoleBit, ste: State) => {
+  const slv = bal.slv;
+  if (bal.idx == null) bal.idx = 'can00';
+  bit = await ste.hunt(ActCol.READ_COLLECT, {
+    idx: bal.idx,
+    bit: ActCns.CREATE_CONSOLE,
+  });
+  if (slv != null) slv({ cnsBit: { idx: 'read-console', dat: bit.clcBit.dat } });
 
-    return cpy
-}
-export const writeConsole = async (
-    cpy: ConsoleModel,
-    bal: ConsoleBit,
-    ste: State,
-) => {
-    bit = await ste.hunt(ActCol.WRITE_COLLECT, {
-        idx: bal.idx,
-        src: bal.src,
-        dat: bal.dat,
-        bit: ActCns.CREATE_CONSOLE,
-    })
-    ste.hunt(ActCns.UPDATE_CONSOLE, { idx: bal.idx, src: bal.src })
+  return cpy;
+};
+export const writeConsole = async (cpy: ConsoleModel, bal: ConsoleBit, ste: State) => {
+  bit = await ste.hunt(ActCol.WRITE_COLLECT, {
+    idx: bal.idx,
+    src: bal.src,
+    dat: bal.dat,
+    bit: ActCns.CREATE_CONSOLE,
+  });
+  ste.hunt(ActCns.UPDATE_CONSOLE, { idx: bal.idx, src: bal.src });
 
-    if (bal.slv != null)
-        bal.slv({ cnsBit: { idx: 'write-console', dat: bit.clcBit.dat } })
-    return cpy
-}
-export const removeConsole = (
-    cpy: ConsoleModel,
-    bal: ConsoleBit,
-    ste: State,
-) => {
-    debugger
-    return cpy
-}
-export const deleteConsole = (
-    cpy: ConsoleModel,
-    bal: ConsoleBit,
-    ste: State,
-) => {
-    debugger
-    return cpy
-}
+  if (bal.slv != null) bal.slv({ cnsBit: { idx: 'write-console', dat: bit.clcBit.dat } });
+  return cpy;
+};
+export const removeConsole = (cpy: ConsoleModel, bal: ConsoleBit, ste: State) => {
+  debugger;
+  return cpy;
+};
+export const deleteConsole = (cpy: ConsoleModel, bal: ConsoleBit, ste: State) => {
+  debugger;
+  return cpy;
+};
 
-import type { ConsoleModel } from '../console.model'
-import type ConsoleBit from '../fce/console.bit'
-import type State from '../../99.core/state'
+import type { ConsoleModel } from '../console.model';
+import type ConsoleBit from '../fce/console.bit';
+import type State from '../../99.core/state';
 
-import type TermBit from '../fce/term.bit'
-import type { TerminalModel } from '../../80.terminal.unit/terminal.model'
+import type TermBit from '../fce/term.bit';
+import type { TerminalModel } from '../../80.terminal.unit/terminal.model';
 
-import * as COLOR from '../../val/console-color'
+import * as COLOR from '../../val/console-color';
