@@ -1,0 +1,22 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../../dist/packages/001.lore",
+        "rootDir": "../../",
+        "composite": true,
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "target": "ES2022",
+        "skipLibCheck": true,
+        "strict": true,
+        "esModuleInterop": true
+    },
+    "include": [
+        "**/*",
+        "../../apps/995.library/995.library/99.core/interface/action.interface.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}
