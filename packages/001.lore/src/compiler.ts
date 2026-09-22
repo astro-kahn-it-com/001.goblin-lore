@@ -191,7 +191,7 @@ export function compileLoreInstance(options: CompileOptions): {
     recStack.add(nodeId)
 
     const targets = entities.grievances[nodeId]?.spawns_on_max_escalation || []
-    for (const nextId of targets) {
+    for (const nextId of [...targets].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0))) {
       if (!visited.has(nextId)) {
         checkAcyclic(nextId)
       } else if (recStack.has(nextId)) {
@@ -203,7 +203,10 @@ export function compileLoreInstance(options: CompileOptions): {
     recStack.delete(nodeId)
   }
 
-  for (const grievanceId of Object.keys(entities.grievances)) {
+  const sortedGrievanceIds = Object.keys(entities.grievances).sort((a, b) =>
+    (a < b ? -1 : a > b ? 1 : 0)
+  )
+  for (const grievanceId of sortedGrievanceIds) {
     if (!visited.has(grievanceId)) {
       checkAcyclic(grievanceId)
     }

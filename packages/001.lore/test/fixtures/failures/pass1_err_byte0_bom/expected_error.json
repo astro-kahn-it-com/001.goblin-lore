@@ -1,0 +1,5 @@
+{
+  "pass": 1,
+  "error_code": "BYTE_ZERO_VIOLATION",
+  "expected_message_regex": "\\[PASS 1 ERROR\\] File bad_bom\\.md does not begin with YAML frontmatter at byte 0\\."
+}

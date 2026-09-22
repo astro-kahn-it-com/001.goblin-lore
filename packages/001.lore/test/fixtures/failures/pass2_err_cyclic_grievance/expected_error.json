@@ -1,0 +1,5 @@
+{
+  "pass": 2,
+  "error_code": "CYCLIC_DAG_ESCALATION",
+  "expected_message_regex": "\\[PASS 2 ERROR\\] Cyclic grievance escalation detected: 'grv_g2' -> 'grv_g1'"
+}
