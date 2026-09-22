@@ -24,7 +24,7 @@ const PACKAGES_CONFIG: Record<
         globalKey: 'CLOUDFLARE',
         menuTitle: 'CLOUDFLARE MENU',
         menuDesc: 'Open the Cloudflare menu\nto manage cloudflare.',
-    }
+    },
 }
 
 const getExistingPackages = () => {
