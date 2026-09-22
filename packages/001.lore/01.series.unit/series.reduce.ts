@@ -18,6 +18,9 @@ export function reducer(
         case Act.TEST_SERIES:
             return Buzz.testSeries(clone(model), act.bale, state)
 
+        case Act.CREATE_SERIES:
+            return Buzz.createSeries(clone(model), act.bale, state)
+
         default:
             return model
     }
