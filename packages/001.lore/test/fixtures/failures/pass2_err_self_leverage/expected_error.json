@@ -1,0 +1,5 @@
+{
+  "pass": 2,
+  "error_code": "SELF_LEVERAGE_DISALLOWED",
+  "expected_message_regex": "\\[PASS 2 ERROR\\] Character 'char_narcissist' cannot hold leverage over itself\\."
+}
