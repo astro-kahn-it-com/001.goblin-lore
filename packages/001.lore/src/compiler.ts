@@ -67,32 +67,112 @@ export function compileLoreInstance(options: CompileOptions): {
   parseDirectory('locations', LocationSchema, 'locations')
   parseDirectory('possessions', PossessionSchema, 'possessions')
 
-  // PASS 2: Relational Integrity & DAG Sweeps
+  // PASS 2: Comprehensive Relational Integrity & DAG Sweeps
+
+  // 1. Audit Characters -> Locations, Possessions, Social Graph
   for (const [charId, character] of Object.entries(entities.characters)) {
+    // 1a. Spatial Resolution
     if (character.location && !entities.locations[character.location]) {
       throw new Error(
         `[PASS 2 ERROR] Character '${charId}' references missing location: '${character.location}'`,
       )
     }
+
+    // 1b. Logistical Equip Slots
     for (const slot of ['worn', 'held', 'carried', 'cached']) {
       for (const itemId of character.logistical?.[slot] || []) {
         if (!entities.possessions[itemId]) {
           throw new Error(
-            `[PASS 2 ERROR] Character '${charId}' equips missing possession: '${itemId}'`,
+            `[PASS 2 ERROR] Character '${charId}' equips missing possession in '${slot}': '${itemId}'`,
           )
         }
       }
     }
-  }
 
-  for (const [grievanceId, grievance] of Object.entries(entities.grievances)) {
-    for (const participantId of grievance.participants_primary || []) {
-      if (!entities.characters[participantId]) {
+    // 1c. Epistemic: strings_held_over
+    for (const debtTarget of character.epistemic?.strings_held_over || []) {
+      if (debtTarget === charId) {
         throw new Error(
-          `[PASS 2 ERROR] Grievance '${grievanceId}' references non-existent participant: '${participantId}'`,
+          `[PASS 2 ERROR] Character '${charId}' cannot hold a string over itself.`,
+        )
+      }
+      if (!entities.characters[debtTarget]) {
+        throw new Error(
+          `[PASS 2 ERROR] Character '${charId}' holds string over missing character: '${debtTarget}'`,
         )
       }
     }
+
+    // 1d. Epistemic: leverage_strings keys
+    for (const leverageTarget of Object.keys(
+      character.epistemic?.leverage_strings || {},
+    )) {
+      if (leverageTarget === charId) {
+        throw new Error(
+          `[PASS 2 ERROR] Character '${charId}' cannot hold leverage over itself.`,
+        )
+      }
+      if (!entities.characters[leverageTarget]) {
+        throw new Error(
+          `[PASS 2 ERROR] Character '${charId}' declares leverage over missing character: '${leverageTarget}'`,
+        )
+      }
+    }
+
+    // 1e. Epistemic: relationship_defaults keys
+    for (const relTarget of Object.keys(
+      character.epistemic?.relationship_defaults || {},
+    )) {
+      if (relTarget === charId) {
+        throw new Error(
+          `[PASS 2 ERROR] Character '${charId}' cannot declare relationship default with itself.`,
+        )
+      }
+      if (!entities.characters[relTarget]) {
+        throw new Error(
+          `[PASS 2 ERROR] Character '${charId}' references missing relationship character: '${relTarget}'`,
+        )
+      }
+    }
+  }
+
+  // 2. Audit Locations -> Spatial Adjacency
+  for (const [locId, location] of Object.entries(entities.locations)) {
+    for (const neighborId of location.adjacent_locations || []) {
+      if (neighborId === locId) {
+        throw new Error(
+          `[PASS 2 ERROR] Location '${locId}' cannot declare adjacency to itself.`,
+        )
+      }
+      if (!entities.locations[neighborId]) {
+        throw new Error(
+          `[PASS 2 ERROR] Location '${locId}' declares adjacency to missing location: '${neighborId}'`,
+        )
+      }
+    }
+  }
+
+  // 3. Audit Grievances -> Participants & Escalation Trees
+  for (const [grievanceId, grievance] of Object.entries(entities.grievances)) {
+    // 3a. Primary Participants
+    for (const participantId of grievance.participants_primary || []) {
+      if (!entities.characters[participantId]) {
+        throw new Error(
+          `[PASS 2 ERROR] Grievance '${grievanceId}' references non-existent primary participant: '${participantId}'`,
+        )
+      }
+    }
+
+    // 3b. Secondary Participants (can_involve)
+    for (const participantId of grievance.participants_can_involve || []) {
+      if (!entities.characters[participantId]) {
+        throw new Error(
+          `[PASS 2 ERROR] Grievance '${grievanceId}' references non-existent secondary participant: '${participantId}'`,
+        )
+      }
+    }
+
+    // 3c. Escalation Target Existence
     for (const spawnId of grievance.spawns_on_max_escalation || []) {
       if (!entities.grievances[spawnId]) {
         throw new Error(
@@ -102,7 +182,7 @@ export function compileLoreInstance(options: CompileOptions): {
     }
   }
 
-  // Cycle check on grievance escalation graph (DFS)
+  // 4. Cycle check on grievance escalation graph (DFS)
   const visited = new Set<string>()
   const recStack = new Set<string>()
 
@@ -192,16 +272,14 @@ export function compileLoreInstance(options: CompileOptions): {
 }
 
 if (
-    process.argv[1] &&
-    import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href
+  process.argv[1] &&
+  import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href
 ) {
-  // Resolve repository root relative to packages/001.lore/src/
   let repoRoot = process.cwd()
-  // Adjust if script is run from within the package
   if (repoRoot.endsWith('packages/001.lore')) {
-      repoRoot = path.resolve(repoRoot, '../../')
+    repoRoot = path.resolve(repoRoot, '../../')
   } else if (repoRoot.endsWith('packages/001.lore/src')) {
-      repoRoot = path.resolve(repoRoot, '../../../')
+    repoRoot = path.resolve(repoRoot, '../../../')
   }
   const instanceDir = path.resolve(repoRoot, 'series/under-the-floorboards')
   const compiledRootDir = path.resolve(repoRoot, 'compiled')
