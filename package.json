@@ -59,9 +59,9 @@
         "reset": "npm run uninstall && npm install && npm run build",
         "//__ 🚢 SHIP ____________________________": "",
         "ship": "npm run build && npm run deploy --workspace=@camp_candor/agent -- --env staging && npm run audit:staging",
-        "compile:lore": "npm run compile --workspace=@camp_candor/001.lore",
+        "compile:lore": "tsx packages/001.lore/src/compiler.ts",
         "test:lore": "npm run test --workspace=@camp_candor/001.lore",
-        "audit:lore": "npm run compile:lore && git diff --exit-code series/"
+        "audit:lore": "npm run compile:lore && git diff --exit-code compiled/under-the-floorboards/bible-state.json"
     },
     "lint-staged": {
         "*.{js,ts,tsx,json,css,md}": [
