@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import { pathToFileURL } from 'url'
 import crypto from 'crypto'
 import matter from 'gray-matter'
 import {
@@ -173,7 +174,10 @@ export function compileLoreInstance(options: CompileOptions): {
     }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (
+    process.argv[1] &&
+    import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href
+) {
     const instanceDir = path.resolve(
         process.cwd(),
         '../../series/under-the-floorboards',

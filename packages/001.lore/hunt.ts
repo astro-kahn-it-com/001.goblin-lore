@@ -1,4 +1,5 @@
-import { BehaviorSubject } from 'rx-lite'
+import rxLite from 'rx-lite'
+const { BehaviorSubject } = (rxLite as any).default || rxLite
 import * as Import from './BEE.js'
 
 class State extends BehaviorSubject<any> {

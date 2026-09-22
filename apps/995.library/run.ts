@@ -104,10 +104,19 @@ const init = async () => {
         // Register each active package into the Blessed Menu registry
         for (const pkg of existingPackages) {
             try {
-                const pkgDistPath = path.resolve(
+                let pkgDistPath = path.resolve(
                     import.meta.dirname,
                     `../../packages/dist/${pkg.name}`,
                 )
+                if (!fs.existsSync(pkgDistPath)) {
+                    const localDist = path.resolve(
+                        import.meta.dirname,
+                        `../../packages/${pkg.name}/dist`,
+                    )
+                    if (fs.existsSync(localDist)) {
+                        pkgDistPath = localDist
+                    }
+                }
                 const MODULE = require(path.join(pkgDistPath, 'hunt'))
                 ;(global as any)[pkg.globalKey] = MODULE.default || MODULE
 
