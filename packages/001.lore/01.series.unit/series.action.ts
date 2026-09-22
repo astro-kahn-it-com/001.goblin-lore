@@ -24,4 +24,10 @@ export class TestSeries implements Action {
     constructor(public bale: SeriesBit) {}
 }
 
-export type Actions = InitSeries | UpdateSeries | TestSeries
+export const CREATE_SERIES = '[Series action] Create Series'
+export class CreateSeries implements Action {
+    readonly type = CREATE_SERIES
+    constructor(public bale: SeriesBit) {}
+}
+
+export type Actions = InitSeries | UpdateSeries | TestSeries | CreateSeries
