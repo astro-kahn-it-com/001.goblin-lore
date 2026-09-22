@@ -24,22 +24,7 @@ const PACKAGES_CONFIG: Record<
         globalKey: 'CLOUDFLARE',
         menuTitle: 'CLOUDFLARE MENU',
         menuDesc: 'Open the Cloudflare menu\nto manage cloudflare.',
-    },
-    '000.agent': {
-        globalKey: 'AGENT',
-        menuTitle: 'AGENT MENU',
-        menuDesc: 'Open the Agent menu\nto manage agents.',
-    },
-    '821.repobot': {
-        globalKey: 'REPOBOT',
-        menuTitle: 'REPOBOT MENU',
-        menuDesc: 'Open the Repobot menu\nto manage repobots.',
-    },
-    '823.jules': {
-        globalKey: 'JULES',
-        menuTitle: 'JULES MENU',
-        menuDesc: 'Open the Jules menu\nto manage jules.',
-    },
+    }
 }
 
 const getExistingPackages = () => {

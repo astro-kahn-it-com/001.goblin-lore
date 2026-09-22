@@ -74,7 +74,7 @@ GOVERNING RULES:
 
 const app = new Hono<{ Bindings: Env }>()
 
-app.get('/', (c) => c.text('REPO-BOT EDGE CONTROL PLANE IS LIVE.'))
+app.get('/', (c) => c.text('GOBLIN LORE EDGE CONTROL PLANE IS LIVE.'))
 
 app.get('/health', async (c) => {
     return c.json({
