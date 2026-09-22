@@ -1,0 +1,27 @@
+{
+    "name": "@camp_candor/001.lore",
+    "version": "0.0.1",
+    "private": true,
+    "type": "module",
+    "main": "./dist/src/index.js",
+    "types": "./dist/src/index.d.ts",
+    "scripts": {
+        "build": "tsc -b",
+        "compile": "tsx src/compiler.ts",
+        "test": "vitest run"
+    },
+    "dependencies": {
+        "clone-deep": "4.0.1",
+        "dotenv": "^16.6.1",
+        "gray-matter": "^4.0.3",
+        "rx-lite": "4.0.8",
+        "string": "3.3.3",
+        "zod": "^3.25.76"
+    },
+    "devDependencies": {
+        "@types/node": "^24.0.3",
+        "tsx": "^4.20.4",
+        "typescript": "^5.5.2",
+        "vitest": "3.2.4"
+    }
+}
