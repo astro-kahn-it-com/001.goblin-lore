@@ -1,4 +1,5 @@
 import * as ActLor from '../../00.lore.unit/lore.action.js'
+import * as ActSer from '../../01.series.unit/series.action.js'
 import type { MenuModel } from '../menu.model.js'
 import type MenuBit from '../fce/menu.bit.js'
 
@@ -38,7 +39,7 @@ export const initMenu = async (cpy: MenuModel, bal: MenuBit, ste: any) => {
 }
 
 export const updateMenu = async (cpy: MenuModel, bal: MenuBit, ste: any) => {
-    const lst = ['COMPILE LORE INSTANCE', 'ROOT MENU']
+    const lst = ['COMPILE LORE INSTANCE', 'TEST SERIES', 'ROOT MENU']
 
     // @ts-ignore
     const bit = await global.LIBRARY.hunt('[Grid action] Update Grid', {
@@ -59,6 +60,10 @@ export const updateMenu = async (cpy: MenuModel, bal: MenuBit, ste: any) => {
     switch (src) {
         case 'COMPILE LORE INSTANCE':
             await ste.hunt(ActLor.COMPILE_LORE, {})
+            break
+        case 'TEST SERIES':
+        case 'SERIES MENU':
+            await ste.hunt(ActSer.TEST_SERIES, {})
             break
         case 'ROOT MENU':
             if (rootSlv) rootSlv({ mnuBit: { idx: 'root-menu' } })

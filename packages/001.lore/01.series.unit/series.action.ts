@@ -1,5 +1,8 @@
-import { Action } from '../99.core/interface/action.interface'
-import SeriesBit from './fce/series.bit'
+export interface Action<T = unknown> {
+    type: string
+    bale?: T
+}
+import type SeriesBit from './fce/series.bit.js'
 
 // Series actions
 
@@ -15,4 +18,10 @@ export class UpdateSeries implements Action {
     constructor(public bale: SeriesBit) {}
 }
 
-export type Actions = InitSeries | UpdateSeries
+export const TEST_SERIES = '[Series action] Test Series'
+export class TestSeries implements Action {
+    readonly type = TEST_SERIES
+    constructor(public bale: SeriesBit) {}
+}
+
+export type Actions = InitSeries | UpdateSeries | TestSeries

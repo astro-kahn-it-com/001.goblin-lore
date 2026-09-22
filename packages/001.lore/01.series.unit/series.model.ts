@@ -1,8 +1,5 @@
-import Series from './fce/series.interface'
-import SeriesBit from './fce/series.interface'
+import type Series from './fce/series.interface.js'
 
 export class SeriesModel implements Series {
-    //idx:string;
-    //seriesBitList: SeriesBit[] = [];
-    //seriesBits: any = {};
+    idx: string = '01.series'
 }
