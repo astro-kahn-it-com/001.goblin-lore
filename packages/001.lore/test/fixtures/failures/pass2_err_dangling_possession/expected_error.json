@@ -1,0 +1,5 @@
+{
+  "pass": 2,
+  "error_code": "DANGLING_POSSESSION",
+  "expected_message_regex": "\\[PASS 2 ERROR\\] Character 'char_equipper' equips missing possession in 'held': 'item_phantom_blade'"
+}
