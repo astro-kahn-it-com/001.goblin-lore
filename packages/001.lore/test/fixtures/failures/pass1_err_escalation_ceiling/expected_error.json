@@ -1,0 +1,5 @@
+{
+  "pass": 1,
+  "error_code": "CEILING_BOUND_EXCEEDED",
+  "expected_message_regex": "Number must be less than or equal to 5"
+}

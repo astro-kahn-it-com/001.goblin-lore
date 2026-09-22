@@ -1,0 +1,5 @@
+{
+  "pass": 1,
+  "error_code": "FLOAT_DISALLOWED",
+  "expected_message_regex": "Expected integer, received float"
+}

@@ -1,0 +1,5 @@
+{
+  "pass": 2,
+  "error_code": "DANGLING_LOCATION",
+  "expected_message_regex": "\\[PASS 2 ERROR\\] Character 'char_lost' references missing location: 'loc_abyss'"
+}
