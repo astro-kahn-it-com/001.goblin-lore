@@ -1,4 +1,4 @@
-export default interface MythosBit {
+export default interface TerminalBit {
     idx: string
     src?: string
     lst?: any[]

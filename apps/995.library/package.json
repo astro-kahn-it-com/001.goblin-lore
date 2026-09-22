@@ -1,6 +1,6 @@
 {
     "name": "@camp_candor/995.library",
-    "version": "1.0.0",
+    "version": "1.0.6",
     "private": true,
     "scripts": {
         "dev": "npx tsx run.ts -t pivot",
@@ -38,12 +38,12 @@
         "gpt-tokenizer": "^3.0.1",
         "h3-js": "^3.7.2",
         "honeycomb-grid": "^3.1.8",
+        "jsdom": "^26.1.0",
         "luxon": "^3.6.1",
         "markdown-it": "^14.1.0",
         "nearest-color": "^0.4.4",
         "neo4j-driver": "5.28.2",
         "nodepub": "^3.2.1",
-        "ollama": "^0.5.0",
         "open-editor": "^5.1.0",
         "openai": "^5.15.0",
         "pngjs": "^7.0.0",

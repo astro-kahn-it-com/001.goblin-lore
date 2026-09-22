@@ -1,3 +1,3 @@
 cd..
-cd vcode-debug
-start Code.exe ../npm-worker-01
+cd vcode
+start Code.exe ../001.goblin-lore

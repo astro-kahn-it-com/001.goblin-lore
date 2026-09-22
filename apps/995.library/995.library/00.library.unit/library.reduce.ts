@@ -19,11 +19,17 @@ export function reducer(
         case Act.LIST_LIBRARY:
             return Buzz.listLibrary(clone(model), act.bale, state)
 
-        case Act.PROGESS_LIBRARY:
-            return Buzz.progessLibrary(clone(model), act.bale, state)
+        case Act.PROGRESS_LIBRARY:
+            return Buzz.progressLibrary(clone(model), act.bale, state)
 
         case Act.SCAN_LIBRARY:
             return Buzz.scanLibrary(clone(model), act.bale, state)
+
+        case Act.LAUNCH_LIBRARY:
+            return Buzz.launchLibrary(clone(model), act.bale, state)
+
+        case Act.FLAT_LIBRARY:
+            return Buzz.flatLibrary(clone(model), act.bale, state)
 
         default:
             return model

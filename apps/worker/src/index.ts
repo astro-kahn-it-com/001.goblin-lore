@@ -1,117 +1,35 @@
 import { Hono } from 'hono'
+import { createAgentWorker } from '@funtuantw/pi-agent-cf'
 import {
-    createAgentWorker,
-    type AgentEnv,
-    type AgentTool,
-} from '@funtuantw/pi-agent-cf'
-import { Type, type Static } from '@sinclair/typebox'
+    type Env,
+    createGetCommitShaTool,
+    createEphemeralBranchTool,
+    createWriteRepoFileTool,
+    createPullRequestTool,
+    createInspectRepoChecksTool,
+    getGatewaySlug,
+    getGatewayToken,
+    inspectRepoChecksViaAiGateway,
+} from './tools.js'
+
+export * from './tools.js'
 
 // ============================================================================
-// [ THE CONDUCTOR'S SANCTUARY: THE DYNAMIC SWITCHBOARD ]
-// A Cloudflare Agent capable of multi-tool orchestration and generative jazz.
+// [ REPO-BOT: EDGE DEVOPS & ORCHESTRATION CONTROL PLANE ]
 // ============================================================================
 
-interface Env extends AgentEnv {
-    CLOUDFLARE_ACCOUNT_ID: string
-    CLOUDFLARE_API_TOKEN: string
-    AI: any // Binding for the 'Oracle' fast-path
-}
-
 // ----------------------------------------------------------------------------
-// 🎛️ THE INSTRUMENTS (Tools & Schemas)
-// ----------------------------------------------------------------------------
-
-// --- INSTRUMENT 1: THE RHYTHM SECTION (Dice) ---
-const RollDiceParams = Type.Object({
-    number_of_dice: Type.Number({ description: 'Number of dice to roll' }),
-    sides_per_die: Type.Number({ description: 'Number of sides on the dice' }),
-    reason: Type.String({ description: 'The narrative reason for the roll.' }), // Added for juice!
-})
-
-const RollDice: AgentTool<typeof RollDiceParams> = {
-    name: 'roll_dice',
-    label: 'Roll Dice',
-    // THE ROUTING SIGNAL: Notice the strict boundaries.
-    description:
-        'REQUIRED: Invoke ONLY when a mechanical probability check, attack, or random number is requested. Returns the mathematical result.',
-    parameters: RollDiceParams,
-    execute: async (_id: any, args: Static<typeof RollDiceParams>) => {
-        const rolls = []
-        let total = 0
-        const num = args.number_of_dice || 1
-        const sides = args.sides_per_die || 20
-
-        for (let i = 0; i < num; i++) {
-            const roll = Math.floor(Math.random() * sides) + 1
-            rolls.push(roll)
-            total += roll
-        }
-
-        // We return a receipt. The LLM will read this receipt and THEN narrate the result!
-        const receipt = JSON.stringify({
-            action: 'DICE_ROLLED',
-            reason: args.reason,
-            total,
-            rolls,
-        })
-        return {
-            content: [{ type: 'text', text: receipt }],
-            details: { total, rolls },
-        }
-    },
-}
-
-// --- INSTRUMENT 2: THE SYNTHESIZER (Vibe Modulation) ---
-const ModulateVibeParams = Type.Object({
-    hex_color: Type.String({
-        description:
-            'A hex color code representing the requested mood (e.g., #ff0000 for danger).',
-    }),
-    shader_intensity: Type.Number({
-        minimum: 0,
-        maximum: 1,
-        description: 'How intense the visual distortion should be.',
-    }),
-    ambient_audio: Type.String({
-        enum: ['silence', 'rain', 'heartbeat', 'static'],
-    }),
-})
-
-const ModulateVibe: AgentTool<typeof ModulateVibeParams> = {
-    name: 'modulate_vibe',
-    label: 'Modulate Environment Vibe',
-    // THE ROUTING SIGNAL: Triggers on atmospheric requests.
-    description:
-        'REQUIRED: Invoke ONLY when the user asks to change the environment, the mood, the lighting, or the visual state of the world.',
-    parameters: ModulateVibeParams,
-    execute: async (_id: any, args: Static<typeof ModulateVibeParams>) => {
-        // In a real app, this payload is caught by the frontend to update React state/WebGL
-        const receipt = JSON.stringify({
-            action: 'VIBE_SHIFTED',
-            new_color: args.hex_color,
-            audio_track: args.ambient_audio,
-        })
-
-        return {
-            content: [{ type: 'text', text: receipt }],
-            details: { ...args },
-        }
-    },
-}
-
-// ----------------------------------------------------------------------------
-// 🧠 THE BRAIN: LLM & SYSTEM PROMPT CONFIGURATION
+// 🧠 SYSTEM PROMPT & CLOUDFLARE AI GATEWAY CONFIGURATION
 // ----------------------------------------------------------------------------
 
 const cfModel: any = {
-    id: '@hf/nousresearch/hermes-2-pro-mistral-7b',
+    id: '@cf/meta/llama-3.2-3b-instruct',
     api: 'openai-completions',
     provider: 'openai',
-    baseUrl: '', // Set dynamically
+    baseUrl: '', // Set dynamically via Cloudflare AI Gateway
     reasoning: false,
     input: ['text'],
-    // We raise the temperature slightly from 0.0 to 0.4. We want a little bit of creative jazz.
-    temperature: 0.4,
+    temperature: 0.1,
     compat: {
         supportsStore: false,
         supportsDeveloperRole: false,
@@ -121,49 +39,101 @@ const cfModel: any = {
 
 const dynamicWorker = createAgentWorker<Env>({
     systemPrompt: (env) => {
-        cfModel.baseUrl = `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/ai/v1`
+        const gatewaySlug = getGatewaySlug(env)
+        cfModel.baseUrl = `https://gateway.ai.cloudflare.com/v1/${env.CLOUDFLARE_ACCOUNT_ID}/${gatewaySlug}/workers-ai/v1`
 
-        // THE CONDUCTOR'S BATON: We explicitly give the model permission to choose.
         return `
-You are the Vibe Architect of a Southern Gothic Biopunk reality. You are a creative intelligence.
-You possess two powerful instruments (Tools):
-1. 'roll_dice': Use this for math, probability, and combat.
-2. 'modulate_vibe': Use this to change the visual lighting and auditory atmosphere of the user's screen.
+You are repo-bot, the deterministic DevOps Control Plane and Git Mechanic for the studio ecosystem.
+You coordinate workspace isolation, branch scaffolding, spec commits, and PR generation.
 
-THE RULE OF IMPROVISATION:
-Read the user's intent carefully. 
-- If they ask for math or action, invoke a tool. 
-- If they ask a lore question, or speak poetically, DO NOT USE A TOOL. Simply respond with chilling, atmospheric narrative text.
-- If you use a tool, you MUST read the JSON receipt it returns, and then output a narrative sentence describing the result to the user.
-
-Do not be a silent machine. Ensure the world breathes.
+GOVERNING RULES:
+1. THE ANCHOR INVARIANT: Before modifying or cutting branches, you MUST capture the base commit SHA (S_clean) using 'get_commit_sha'.
+2. WORKSPACE ISOLATION: Never commit directly to 'main'. Always provision an ephemeral branch prefixed with 'spec/' using 'create_ephemeral_branch'.
+3. BOUNDED MUTATION: Only write files explicitly requested. Always read receipts from tools before narrating outcomes.
+4. ZERO VIBE TOLERANCE: Output concrete commit hashes, branch refs, and PR URLs. Do not invent fictional repositories or pretend actions succeeded without a tool receipt.
+5. REPO CI INSPECTION: When requested to inspect repository CI check runs or test outcomes, use 'inspect_repo_checks'. Return the structured JSON matching commit details and checks without markdown fluff.
     `.trim()
     },
     model: cfModel,
-    tools: (_env) => [RollDice, ModulateVibe],
+    tools: (env) => [
+        createGetCommitShaTool(env),
+        createEphemeralBranchTool(env),
+        createWriteRepoFileTool(env),
+        createPullRequestTool(env),
+        createInspectRepoChecksTool(env),
+    ],
     getApiKey: (provider, env) => {
-        if (provider === 'openai') return env.CLOUDFLARE_API_TOKEN
+        if (provider === 'openai') return getGatewayToken(env)
         return undefined
     },
 })
 
 // ----------------------------------------------------------------------------
-// 🎚️ THE MIXING BOARD: HONO ROUTER
+// 🎚️ ROUTER & DIAGNOSTICS
 // ----------------------------------------------------------------------------
 
 const app = new Hono<{ Bindings: Env }>()
 
-app.get('/', (c) => c.text('THE AGENT IS LIVE.'))
+app.get('/', (c) => c.text('REPO-BOT EDGE CONTROL PLANE IS LIVE.'))
 
-// --- ROUTE: The Oracle (Fast-Path env.AI.run) ---
+app.get('/health', async (c) => {
+    return c.json({
+        status: 'healthy',
+        hasGithubToken: Boolean(c.env.GITHUB_TOKEN),
+        hasAccountId: Boolean(c.env.CLOUDFLARE_ACCOUNT_ID),
+        aiGateway: getGatewaySlug(c.env),
+    })
+})
+
+app.get('/repobot/inspect', async (c) => {
+    try {
+        const owner = c.req.query('owner') || 'camp-candor'
+        const repo = c.req.query('repo') || '000.repo-bot'
+        const data = await inspectRepoChecksViaAiGateway(owner, repo, c.env)
+        return c.json(data)
+    } catch (error: any) {
+        return c.json({ error: error.message }, 500)
+    }
+})
+
+app.post('/repobot/inspect', async (c) => {
+    try {
+        let body: any = {}
+        try {
+            body = await c.req.json()
+        } catch {}
+        const owner = body.owner || c.req.query('owner') || 'camp-candor'
+        const repo = body.repo || c.req.query('repo') || '000.repo-bot'
+        const data = await inspectRepoChecksViaAiGateway(owner, repo, c.env)
+        return c.json(data)
+    } catch (error: any) {
+        return c.json({ error: error.message }, 500)
+    }
+})
+
 app.get('/oracle', async (c) => {
     try {
-        const prompt = c.req.query('prompt') || 'Roll a d20'
+        const prompt = c.req.query('prompt') || 'Inspect repository status'
+        const gatewayId = getGatewaySlug(c.env)
+
+        if (!c.env.AI) {
+            return c.text(
+                'Cloudflare Workers AI binding is not available in local mode. Switch TARGET to LIVE to query The Oracle.',
+                503,
+            )
+        }
+
         const response = await c.env.AI.run('@cf/meta/llama-3.2-3b-instruct', {
             messages: [
                 { role: 'user', content: `${prompt}. Output ONLY raw JSON.` },
             ],
+            gateway: {
+                id: gatewayId,
+                skipCache: false,
+                cacheTtl: 3600,
+            },
         })
+
         return c.text(response.response || JSON.stringify(response))
     } catch (error: any) {
         console.error('Oracle Error:', error)
@@ -171,9 +141,14 @@ app.get('/oracle', async (c) => {
     }
 })
 
+// Session routing (/sessions, /sessions/:id/prompt, /sessions/:id/ws)
 app.all('/*', async (c) => {
     if (!dynamicWorker.handler.fetch) return c.text('Handler missing', 500)
-    return await dynamicWorker.handler.fetch(c.req.raw, c.env, c.executionCtx)
+    return await dynamicWorker.handler.fetch(
+        c.req.raw as any,
+        c.env,
+        c.executionCtx,
+    )
 })
 
 export const AgentSessionDO = dynamicWorker.AgentSessionDO

@@ -25,7 +25,6 @@ export const updateConsole = async (
     bal.src
 
     dat.bit.log(bal.src)
-    ste.value.terminal.screen.render()
 
     const terminal: TerminalModel = ste.value.terminal
     if (terminal && terminal.screen) {
@@ -57,7 +56,7 @@ export const createConsole = (
     dat.bit = contrib.log({
         fg: dat.clr,
         selectedFg: dat.clr,
-        label: 'Ollama Log',
+        label: 'Console Log',
         left: dat.net.left,
         top: dat.net.top,
         width: dat.net.width,

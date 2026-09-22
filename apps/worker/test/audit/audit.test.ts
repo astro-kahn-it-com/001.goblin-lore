@@ -1,4 +1,4 @@
-import { describe, test, expect, afterAll } from 'vitest'
+import { describe, test, expect } from 'vitest'
 import { request } from 'playwright-core'
 import { TARGET_URL } from './config.js'
 
@@ -11,7 +11,7 @@ describe(`Mandate 4: Audit (${TARGET_URL})`, () => {
         const response = await api.get('/')
         expect(response.ok()).toBe(true)
         const body = await response.text()
-        expect(body).toContain('ACTIVE')
+        expect(body).toContain('REPO-BOT EDGE CONTROL PLANE IS LIVE')
     })
 
     // --- Oracle Fast-Path ---
