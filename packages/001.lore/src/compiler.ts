@@ -11,10 +11,16 @@ import {
     PardonRecordSchema,
     RuleSchema,
     AuthorizerSchema,
+    UnresolvedCanonSchema,
     type PardonRecord,
     type Rule,
     type Authorizer,
+    type UnresolvedCanon,
 } from '../schemas/index.js'
+import {
+    EpistemicLinter,
+    type EpistemicLeakFinding,
+} from './linters/epistemicLinter.js'
 
 export interface CompileOptions {
     instanceDir: string
@@ -28,6 +34,89 @@ export interface PardonDiagnostic {
     pardonId?: string
     ruleId?: string
     message: string
+}
+
+export interface CompileLoreResult {
+    stateHash: string
+    entityCount: number
+    latestPath: string
+    snapshotPath: string
+    pardonDiagnostics: PardonDiagnostic[]
+    epistemicDiagnostics: EpistemicLeakFinding[]
+}
+
+export function loadOntologyUnresolved(
+    ontologyDir?: string,
+): Map<string, UnresolvedCanon> {
+    let defaultPath = ontologyDir
+        ? path.join(ontologyDir, 'unresolved.json')
+        : path.resolve(
+              process.cwd(),
+              'packages/001.lore/schemas/ontology/unresolved.json',
+          )
+
+    if (!fs.existsSync(defaultPath)) {
+        defaultPath = path.resolve(
+            process.cwd(),
+            'schemas/ontology/unresolved.json',
+        )
+    }
+
+    const map = new Map<string, UnresolvedCanon>()
+    if (fs.existsSync(defaultPath)) {
+        const raw = JSON.parse(fs.readFileSync(defaultPath, 'utf-8'))
+        for (const m of raw.mysteries || []) {
+            const validated = UnresolvedCanonSchema.parse(m)
+            map.set(validated.topic_id, validated)
+        }
+    }
+    return map
+}
+
+export function validatePass2Epistemic(
+    unresolvedTopics: Map<string, UnresolvedCanon>,
+    entities: {
+        characters: Record<string, any>
+        locations: Record<string, any>
+        possessions: Record<string, any>
+        grievances: Record<string, any>
+    },
+    rawDossiers: Array<{ filePath: string; rawContent: string }>,
+): { advisoryDiagnostics: EpistemicLeakFinding[] } {
+    const linter = new EpistemicLinter()
+    const activeTopics = Array.from(unresolvedTopics.values())
+
+    for (const topic of unresolvedTopics.values()) {
+        for (const charId of Object.keys(topic.epistemic_horizons)) {
+            if (!entities.characters[charId]) {
+                continue
+            }
+        }
+
+        for (const charId of Object.keys(topic.distorted_beliefs)) {
+            if (!entities.characters[charId]) {
+                continue
+            }
+        }
+    }
+
+    const advisoryDiagnostics: EpistemicLeakFinding[] = []
+    for (const dossier of rawDossiers) {
+        const parsed = matter(dossier.rawContent)
+        const proseBody = parsed.content
+
+        if (proseBody && proseBody.trim().length > 0) {
+            const findings = linter.scanProse(proseBody, activeTopics)
+            for (const finding of findings) {
+                advisoryDiagnostics.push({
+                    ...finding,
+                    excerpt: `[${dossier.filePath}:${finding.line}] ${finding.excerpt}`,
+                })
+            }
+        }
+    }
+
+    return { advisoryDiagnostics }
 }
 
 export function loadOntologyRules(ontologyDir?: string): Map<string, Rule> {
@@ -191,13 +280,9 @@ export function validatePass2Pardons(
     return { diagnostics, appliedPardons }
 }
 
-export function compileLoreInstance(options: CompileOptions): {
-    stateHash: string
-    entityCount: number
-    latestPath: string
-    snapshotPath: string
-    pardonDiagnostics: PardonDiagnostic[]
-} {
+export function compileLoreInstance(
+    options: CompileOptions,
+): CompileLoreResult {
     const {
         instanceDir,
         compiledRootDir,
@@ -218,6 +303,8 @@ export function compileLoreInstance(options: CompileOptions): {
         possessions: {},
         pardons: {},
     }
+
+    const rawDossiers: Array<{ filePath: string; rawContent: string }> = []
 
     // PASS 1: Shape Validation
     const parseDirectory = (
@@ -252,6 +339,11 @@ export function compileLoreInstance(options: CompileOptions): {
                 const parsed = matter(raw)
                 const validated = schema.parse(parsed.data)
                 entities[bucket][validated.id] = validated
+
+                rawDossiers.push({
+                    filePath: `${subDir}/${file}`,
+                    rawContent: raw,
+                })
             }
         }
     }
@@ -410,6 +502,10 @@ export function compileLoreInstance(options: CompileOptions): {
             strictPardonAudit,
         })
 
+    const unresolved = loadOntologyUnresolved(ontologyDir)
+    const { advisoryDiagnostics: epistemicDiagnostics } =
+        validatePass2Epistemic(unresolved, entities, rawDossiers)
+
     // PASS 3: Sorting & Sealing
     const sortKeysRecursively = (obj: any): any => {
         if (Array.isArray(obj)) return obj.map(sortKeysRecursively)
@@ -460,6 +556,21 @@ export function compileLoreInstance(options: CompileOptions): {
         }))
     }
 
+    if (
+        unresolved.size > 0 &&
+        appliedPardons.length === 0 &&
+        seriesSlug !== 'under-the-floorboards'
+    ) {
+        metaBlock.epistemic_manifest = Array.from(unresolved.values())
+            .filter((m) => m.standing !== 'DEPRECATED_ARCHIVED')
+            .map((m) => ({
+                topic_id: m.topic_id,
+                standing: m.standing,
+                world_status: m.world_status,
+                applied_horizons: m.epistemic_horizons,
+            }))
+    }
+
     const canonicalArtifact = {
         _meta: metaBlock,
         ...sortedEntities,
@@ -491,6 +602,7 @@ export function compileLoreInstance(options: CompileOptions): {
         latestPath,
         snapshotPath,
         pardonDiagnostics,
+        epistemicDiagnostics,
     }
 }
 
@@ -514,6 +626,7 @@ if (
         latestPath,
         snapshotPath,
         pardonDiagnostics,
+        epistemicDiagnostics,
     } = compileLoreInstance({
         instanceDir,
         compiledRootDir,
@@ -526,6 +639,11 @@ if (
     if (pardonDiagnostics.length > 0) {
         console.log(
             `>> [PARDON DIAGNOSTICS] Total: ${pardonDiagnostics.length}`,
+        )
+    }
+    if (epistemicDiagnostics.length > 0) {
+        console.log(
+            `>> [EPISTEMIC DIAGNOSTICS] Total: ${epistemicDiagnostics.length}`,
         )
     }
 }
