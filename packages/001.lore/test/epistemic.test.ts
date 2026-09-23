@@ -247,7 +247,6 @@ epistemic:
 
         const compilerModule = await import('../src/compiler.js')
         const { validatePass2Epistemic } = compilerModule
-        // Since we removed the throw on missing characters to skip checking missing global ones, this test should just run cleanly now
         expect(() =>
             validatePass2Epistemic(
                 testMap as any,
@@ -259,7 +258,9 @@ epistemic:
                 },
                 [],
             ),
-        ).not.toThrow()
+        ).toThrow(
+            /\[PASS 2 EPISTEMIC FATAL\] Mystery 'mystery_ghost' maps epistemic horizon for non-existent character: 'char_ghost'/,
+        )
     })
 
     it('Pass 2 records advisory diagnostic on dossier prose without crashing compiler', () => {
@@ -377,10 +378,17 @@ epistemic:
 
     it('buildCharacterEpistemicPrompt injects sanitized hearsay for RUMOR_ONLY', () => {
         const activeMysteries = Array.from(loadOntologyUnresolved().values())
-        const context = buildCharacterEpistemicPrompt(
-            'char_spleen',
-            activeMysteries,
-        )
+        const testMystery = {
+            ...activeMysteries[0],
+            epistemic_horizons: { char_spleen: 'RUMOR_ONLY' as const },
+            distorted_beliefs: {
+                char_spleen:
+                    'Heard whispers that an unlatched cellar vent let in a killing draft that ruined the stores.',
+            },
+        }
+        const context = buildCharacterEpistemicPrompt('char_spleen', [
+            testMystery as any,
+        ])
 
         expect(context.characterId).toBe('char_spleen')
         const hearsay = context.injectedDirectives.find((d: string) =>

@@ -86,16 +86,22 @@ export function validatePass2Epistemic(
     const linter = new EpistemicLinter()
     const activeTopics = Array.from(unresolvedTopics.values())
 
-    for (const topic of unresolvedTopics.values()) {
+    for (const [topicId, topic] of unresolvedTopics.entries()) {
+        // 1. HARD GATE: Foreign-Key validation on epistemic_horizons
         for (const charId of Object.keys(topic.epistemic_horizons)) {
             if (!entities.characters[charId]) {
-                continue
+                throw new Error(
+                    `[PASS 2 EPISTEMIC FATAL] Mystery '${topicId}' maps epistemic horizon for non-existent character: '${charId}'`,
+                )
             }
         }
 
+        // 2. HARD GATE: Foreign-Key validation on distorted_beliefs
         for (const charId of Object.keys(topic.distorted_beliefs)) {
             if (!entities.characters[charId]) {
-                continue
+                throw new Error(
+                    `[PASS 2 EPISTEMIC FATAL] Mystery '${topicId}' defines distorted belief for non-existent character: '${charId}'`,
+                )
             }
         }
     }
