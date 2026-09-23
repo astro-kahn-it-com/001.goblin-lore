@@ -1,222 +1,171 @@
-import fs from 'node:fs'
 import path from 'node:path'
+import fs from 'node:fs'
+import * as ActMnu from '../menu.action.js'
 import * as ActLor from '../../00.lore.unit/lore.action.js'
-import * as ActSer from '../../01.series.unit/series.action.js'
+import { resolveRepoRoot } from '../../00.lore.unit/buz/lore.buzz.js'
 import type { MenuModel } from '../menu.model.js'
 import type MenuBit from '../fce/menu.bit.js'
 
 let rootSlv: any
 
-const resolveRepoRoot = () => {
-  let curr = process.cwd()
-  while (curr && curr !== path.dirname(curr)) {
-    if (
-      fs.existsSync(path.join(curr, 'packages')) &&
-      (fs.existsSync(path.join(curr, 'series')) ||
-        fs.existsSync(path.join(curr, 'package.json')))
-    ) {
-      return curr
-    }
-    curr = path.dirname(curr)
-  }
-  return process.cwd()
-}
+const UPDATE_GRID = '[Grid action] Update Grid'
+const WRITE_CONSOLE = '[Write action] Write Console'
+const UPDATE_CONSOLE = '[Console action] Update Console'
+const OPEN_CHOICE = '[Open action] Open Choice'
 
 export const initMenu = async (cpy: MenuModel, bal: MenuBit, ste: any) => {
-  if (bal.slv) rootSlv = bal.slv
+    if (bal?.slv != null) rootSlv = bal.slv
 
-  // @ts-ignore
-  if (global.LIBRARY) {
-    // @ts-ignore
-    await global.LIBRARY.hunt('[Grid action] Update Grid', {
-      x: 4,
-      y: 0,
-      xSpan: 8,
-      ySpan: 12,
-    })
-    // @ts-ignore
-    await global.LIBRARY.hunt('[Console action] Update Console', {
-      idx: 'cns00',
-      src: '-----------',
-    })
-    // @ts-ignore
-    await global.LIBRARY.hunt('[Console action] Update Console', {
-      idx: 'cns00',
-      src: 'LORE SYSTEM MENU',
-    })
-    // @ts-ignore
-    await global.LIBRARY.hunt('[Console action] Update Console', {
-      idx: 'cns00',
-      src: '-----------',
-    })
-  }
+    const lib = (global as any).LIBRARY
+    if (lib && typeof lib.hunt === 'function') {
+        const bit = await lib.hunt(UPDATE_GRID, {
+            x: 4,
+            y: 0,
+            xSpan: 8,
+            ySpan: 12,
+        })
+        await lib.hunt(WRITE_CONSOLE, {
+            idx: 'cns00',
+            src: '',
+            dat: { net: bit?.grdBit?.dat, src: 'lore0' },
+        })
 
-  await updateMenu(cpy, bal, ste)
-  return cpy
+        await lib.hunt(UPDATE_CONSOLE, {
+            idx: 'cns00',
+            src: '--------------------------------------------------',
+        })
+        await lib.hunt(UPDATE_CONSOLE, {
+            idx: 'cns00',
+            src: '>> GOBLIN-LORE LEGISLATIVE CONTROL DECK [ONLINE]',
+        })
+        await lib.hunt(UPDATE_CONSOLE, {
+            idx: 'cns00',
+            src: '>> T0 Invariant Enforcement & Epistemic Protection',
+        })
+        await lib.hunt(UPDATE_CONSOLE, {
+            idx: 'cns00',
+            src: '--------------------------------------------------',
+        })
+    }
+
+    await updateMenu(cpy, bal, ste)
+    return cpy
 }
 
 export const updateMenu = async (cpy: MenuModel, bal: MenuBit, ste: any) => {
-  const lst = [
-    'COMPILE LORE INSTANCE',
-    'CREATE SERIES',
-    'TEST SERIES',
-    'ROOT MENU',
-  ]
+    const lst = [
+        'COMPILE LORE INSTANCE',
+        'INSPECT CANON BIBLE',
+        'AUDIT CORPUS INTEGRITY',
+        'ROOT MENU',
+    ]
 
-  // @ts-ignore
-  let bit = await global.LIBRARY.hunt('[Grid action] Update Grid', {
-    x: 0,
-    y: 4,
-    xSpan: 4,
-    ySpan: 8,
-  })
-  // @ts-ignore
-  const choice = await global.LIBRARY.hunt('[Open action] Open Choice', {
-    dat: { clr0: 'black', clr1: 'yellow' },
-    src: 'vertical',
-    lst,
-    net: bit.grdBit.dat,
-  })
-
-  const src = choice.chcBit.src
-
-  switch (src) {
-    case 'COMPILE LORE INSTANCE': {
-      const repoRoot = resolveRepoRoot()
-      const seriesRootDir = path.resolve(repoRoot, 'series')
-      let seriesList: string[] = []
-
-      if (fs.existsSync(seriesRootDir)) {
-        seriesList = fs
-          .readdirSync(seriesRootDir, { withFileTypes: true })
-          .filter(
-            (d) =>
-              d.isDirectory() &&
-              !d.name.startsWith('.') &&
-              !d.name.startsWith('_'),
-          )
-          .map((d) => d.name)
-      }
-
-      if (seriesList.length === 0) {
-        // @ts-ignore
-        if (global.LIBRARY) {
-          // @ts-ignore
-          await global.LIBRARY.hunt('[Console action] Update Console', {
-            idx: 'cns00',
-            src: '>> [WARN] No series found in series/. Create one first.',
-          })
-        }
-        break
-      }
-
-      seriesList.push('CANCEL')
-      // @ts-ignore
-      bit = await global.LIBRARY.hunt('[Grid action] Update Grid', {
-        x: 0,
-        y: 4,
-        xSpan: 4,
-        ySpan: Math.min(12, Math.max(6, seriesList.length + 2)),
-      })
-      // @ts-ignore
-      const seriesChoice = await global.LIBRARY.hunt(
-        '[Open action] Open Choice',
-        {
-          dat: { clr0: 'black', clr1: 'yellow' },
-          src: 'vertical',
-          lst: seriesList,
-          net: bit.grdBit.dat,
-        },
-      )
-
-      const selectedSeries = seriesChoice.chcBit.src
-      if (selectedSeries && selectedSeries !== 'CANCEL') {
-        await ste.hunt(ActLor.COMPILE_LORE, { src: selectedSeries })
-      }
-      break
+    const lib = (global as any).LIBRARY
+    if (!lib || typeof lib.hunt !== 'function') {
+        if (bal?.slv) bal.slv({ mnuBit: { idx: 'update-menu-headless' } })
+        return cpy
     }
 
-    case 'CREATE SERIES': {
-      // @ts-ignore
-      bit = await global.LIBRARY.hunt('[Grid action] Update Grid', {
+    const gridBit = await lib.hunt(UPDATE_GRID, {
         x: 0,
         y: 4,
         xSpan: 4,
-        ySpan: 6,
-      })
-      // @ts-ignore
-      const inputBit = await global.LIBRARY.hunt('[Open action] Open Input', {
+        ySpan: 8,
+    })
+
+    const choiceBit = await lib.hunt(OPEN_CHOICE, {
         dat: { clr0: 'black', clr1: 'yellow' },
         src: 'vertical',
-        lst: [],
-        txt: 'Enter Series Name (e.g. wiregrass-basin)',
-        net: bit.grdBit.dat,
-      })
+        lst,
+        net: gridBit?.grdBit?.dat,
+    })
 
-      const seriesName = inputBit.putBit.src
-      if (seriesName && seriesName.trim().length > 0) {
-        await ste.hunt(ActSer.CREATE_SERIES, { src: seriesName.trim() })
-      }
-      break
-    }
+    const selection = choiceBit?.chcBit?.src
 
-    case 'TEST SERIES': {
-      const repoRoot = resolveRepoRoot()
-      const seriesRootDir = path.resolve(repoRoot, 'series')
-      let seriesList: string[] = []
+    switch (selection) {
+        case 'COMPILE LORE INSTANCE': {
+            const repoRoot = resolveRepoRoot()
+            const seriesRoot = path.join(repoRoot, 'series')
 
-      if (fs.existsSync(seriesRootDir)) {
-        seriesList = fs
-          .readdirSync(seriesRootDir, { withFileTypes: true })
-          .filter(
-            (d) =>
-              d.isDirectory() &&
-              !d.name.startsWith('.') &&
-              !d.name.startsWith('_'),
-          )
-          .map((d) => d.name)
-      }
+            const seriesDirs = fs.existsSync(seriesRoot)
+                ? fs
+                      .readdirSync(seriesRoot, { withFileTypes: true })
+                      .filter((d) => d.isDirectory() && !d.name.startsWith('.'))
+                      .map((d) => d.name)
+                : ['under-the-floorboards']
 
-      if (seriesList.length > 0) {
-        seriesList.push('CANCEL')
-        // @ts-ignore
-        bit = await global.LIBRARY.hunt('[Grid action] Update Grid', {
-          x: 0,
-          y: 4,
-          xSpan: 4,
-          ySpan: Math.min(12, Math.max(6, seriesList.length + 2)),
-        })
-        // @ts-ignore
-        const seriesChoice = await global.LIBRARY.hunt(
-          '[Open action] Open Choice',
-          {
-            dat: { clr0: 'black', clr1: 'yellow' },
-            src: 'vertical',
-            lst: seriesList,
-            net: bit.grdBit.dat,
-          },
-        )
-        const selectedSeries = seriesChoice.chcBit.src
-        if (selectedSeries && selectedSeries !== 'CANCEL') {
-          await ste.hunt(ActSer.TEST_SERIES, { src: selectedSeries })
+            const subChoices = [...seriesDirs, 'CANCEL']
+
+            const subGrid = await lib.hunt(UPDATE_GRID, {
+                x: 0,
+                y: 4,
+                xSpan: 4,
+                ySpan: Math.min(12, Math.max(6, subChoices.length + 2)),
+            })
+
+            const seriesChoice = await lib.hunt(OPEN_CHOICE, {
+                dat: { clr0: 'black', clr1: 'green' },
+                src: 'vertical',
+                lst: subChoices,
+                net: subGrid?.grdBit?.dat,
+            })
+
+            const chosenSlug = seriesChoice?.chcBit?.src
+            if (chosenSlug && chosenSlug !== 'CANCEL') {
+                await ste.hunt(ActLor.COMPILE_LORE, { src: chosenSlug })
+            }
+            break
         }
-      } else {
-        await ste.hunt(ActSer.TEST_SERIES, {})
-      }
-      break
+
+        case 'INSPECT CANON BIBLE': {
+            const repoRoot = resolveRepoRoot()
+            const headFile = path.resolve(
+                repoRoot,
+                'compiled',
+                'under-the-floorboards',
+                'bible-state.json',
+            )
+
+            if (fs.existsSync(headFile)) {
+                const raw = JSON.parse(fs.readFileSync(headFile, 'utf-8'))
+                const hash = raw?._meta?.state_hash || 'MISSING'
+                const entities =
+                    Object.keys(raw?.entities?.characters || {}).length +
+                    Object.keys(raw?.entities?.locations || {}).length +
+                    Object.keys(raw?.entities?.possessions || {}).length +
+                    Object.keys(raw?.entities?.grievances || {}).length
+
+                await lib.hunt(UPDATE_CONSOLE, {
+                    idx: 'cns00',
+                    src: `>> [INSPECT] under-the-floorboards HEAD: ${hash.slice(0, 16)}...`,
+                })
+                await lib.hunt(UPDATE_CONSOLE, {
+                    idx: 'cns00',
+                    src: `>> [ENTITIES] Total Indexed: ${entities}`,
+                })
+            } else {
+                await lib.hunt(UPDATE_CONSOLE, {
+                    idx: 'cns00',
+                    src: '>> [INSPECT ERROR] Canonical bible-state.json not compiled yet.',
+                })
+            }
+            break
+        }
+
+        case 'AUDIT CORPUS INTEGRITY': {
+            await ste.hunt(ActLor.AUDIT_LORE, { src: 'under-the-floorboards' })
+            break
+        }
+
+        case 'ROOT MENU': {
+            if (rootSlv != null) rootSlv({ mnuBit: { idx: 'root-menu' } })
+            return cpy
+        }
     }
 
-    case 'ROOT MENU':
-      if (rootSlv) rootSlv({ mnuBit: { idx: 'root-menu' } })
-      return cpy
+    setTimeout(async () => {
+        await ste.hunt(ActMnu.UPDATE_MENU, {})
+    }, 333)
 
-    default:
-      break
-  }
-
-  setTimeout(async () => {
-    await updateMenu(cpy, bal, ste)
-  }, 333)
-
-  return cpy
+    return cpy
 }

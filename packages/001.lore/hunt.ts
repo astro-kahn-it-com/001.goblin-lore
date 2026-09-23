@@ -4,13 +4,13 @@ import * as Import from './BEE.js'
 
 class State extends BehaviorSubject<any> {
     hunt: any
-    constructor(init = new Import.default()) {
+    constructor(init = Import.models) {
         super(init)
     }
     dispatch(act: any) {
         const curr = this.getValue()
-        for (const key in Import.reducer) {
-            Import.reducer[key](curr[key], act, this)
+        for (const key in Import.reducers) {
+            Import.reducers[key](curr[key], act, this)
         }
         this.onNext(curr)
     }

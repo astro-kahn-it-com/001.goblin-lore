@@ -1,2 +1,1 @@
-export { initLore } from './buz/lore.buzz.js'
-export { compileLore } from './buz/lore.buzz.js'
+export { initLore, compileLore, auditLore } from './buz/lore.buzz.js'

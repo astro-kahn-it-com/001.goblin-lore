@@ -1,3 +1,3 @@
 export default class LoreUnit {
-    constructor(_state: any) {}
+    constructor(_state?: any) {}
 }
