@@ -23,4 +23,10 @@ export class AuditLore implements Action<LoreBit> {
     constructor(public bale: LoreBit) {}
 }
 
-export type Actions = InitLore | CompileLore | AuditLore
+export const SCAFFOLD_ENTITY = '[Lore action] Scaffold Entity'
+export class ScaffoldEntity implements Action<LoreBit> {
+    readonly type = SCAFFOLD_ENTITY
+    constructor(public bale: LoreBit) {}
+}
+
+export type Actions = InitLore | CompileLore | AuditLore | ScaffoldEntity
