@@ -1,7 +1,7 @@
-import DataBit from './data.bit';
+import DataBit from './data.bit'
 
 export default interface Data {
-  // idx:string;
-  // dataBitList: DataBit[];
-  // dataBits:any;
+    // idx:string;
+    // dataBitList: DataBit[];
+    // dataBits:any;
 }

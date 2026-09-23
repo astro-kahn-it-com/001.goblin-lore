@@ -1,7 +1,7 @@
-import GridBit from './grid.bit';
+import GridBit from './grid.bit'
 
 export default interface Grid {
-  // idx:string;
-  // gridBitList: GridBit[];
-  // gridBits: any;
+    // idx:string;
+    // gridBitList: GridBit[];
+    // gridBits: any;
 }

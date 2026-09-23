@@ -1,9 +1,9 @@
 export default interface BusBit {
-  idx?: string;
-  val?: number;
-  lst?: any[];
-  src?: any;
-  bit?: string;
-  slv?: (val?: any) => void;
-  dat?: any;
+    idx?: string
+    val?: number
+    lst?: any[]
+    src?: any
+    bit?: string
+    slv?: (val?: any) => void
+    dat?: any
 }
