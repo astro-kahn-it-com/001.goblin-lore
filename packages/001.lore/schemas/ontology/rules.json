@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "rules": [
+    {
+      "id": "rule_kinetic_limb_conservation",
+      "description": "Characters cannot execute physical actions requiring limbs that are missing, severed, or paralyzed.",
+      "pardonable": false,
+      "severity_class": "PHYSICAL_SOMATIC",
+      "owning_entity_types": ["character"],
+      "max_tolerated_pardon_frequency": 1
+    },
+    {
+      "id": "rule_bimanual_coordination",
+      "description": "Bimanual actions require two functional arms and intact motor capabilities.",
+      "pardonable": false,
+      "severity_class": "PHYSICAL_SOMATIC",
+      "owning_entity_types": ["character"],
+      "max_tolerated_pardon_frequency": 1
+    },
+    {
+      "id": "rule_unresolved_epistemic_leak",
+      "description": "Characters with total ignorance cannot speak, disclose, or refer to protected canon mysteries.",
+      "pardonable": false,
+      "severity_class": "EPISTEMIC",
+      "owning_entity_types": ["character", "scene"],
+      "max_tolerated_pardon_frequency": 1
+    },
+    {
+      "id": "rule_weight_capacity_ceiling",
+      "description": "Characters carrying mass exceeding somatic capacity suffer immediate logistical encumbrance.",
+      "pardonable": true,
+      "severity_class": "ONTOLOGY",
+      "owning_entity_types": ["character", "possession"],
+      "max_tolerated_pardon_frequency": 5
+    },
+    {
+      "id": "rule_equip_slot_borrowing",
+      "description": "Entities may temporarily borrow an equipment slot across logistical categories.",
+      "pardonable": true,
+      "severity_class": "ONTOLOGY",
+      "owning_entity_types": ["character", "possession"],
+      "max_tolerated_pardon_frequency": 10
+    },
+    {
+      "id": "rule_mru_causal_inversion",
+      "description": "Dwight Swain Motivation-Reaction Units sequence external stimulus prior to voluntary response.",
+      "pardonable": true,
+      "severity_class": "STYLE",
+      "owning_entity_types": ["scene"],
+      "max_tolerated_pardon_frequency": 25
+    }
+  ]
+}

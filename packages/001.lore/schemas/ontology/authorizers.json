@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "authorizers": [
+    {
+      "id": "auth_lead_architect",
+      "name": "Lead World Architect",
+      "role": "LEAD_ARCHITECT",
+      "permitted_severity_classes": [
+        "FORMAT",
+        "STYLE",
+        "RELATIONAL",
+        "ONTOLOGY"
+      ]
+    },
+    {
+      "id": "auth_ed_showrunner",
+      "name": "Supervising Showrunner",
+      "role": "SHOWRUNNER",
+      "permitted_severity_classes": [
+        "FORMAT",
+        "STYLE",
+        "RELATIONAL",
+        "ONTOLOGY"
+      ]
+    },
+    {
+      "id": "auth_scene_director",
+      "name": "Episode Scene Director",
+      "role": "SCENE_DIRECTOR",
+      "permitted_severity_classes": ["FORMAT", "STYLE"]
+    }
+  ]
+}

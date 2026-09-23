@@ -8,12 +8,171 @@ import {
   GrievanceSchema,
   LocationSchema,
   PossessionSchema,
+  PardonRecordSchema,
+  RuleSchema,
+  AuthorizerSchema,
+  type PardonRecord,
+  type Rule,
+  type Authorizer,
 } from '../schemas/index.js'
 
 export interface CompileOptions {
-  instanceDir: string // e.g., <rootDir>/series/under-the-floorboards
-  compiledRootDir: string // e.g., <rootDir>/compiled
-  seriesSlug: string // e.g., "under-the-floorboards"
+  instanceDir: string
+  compiledRootDir: string
+  seriesSlug: string
+  strictPardonAudit?: boolean
+}
+
+export interface PardonDiagnostic {
+  code: string
+  pardonId?: string
+  ruleId?: string
+  message: string
+}
+
+export function loadOntologyRules(ontologyDir?: string): Map<string, Rule> {
+  const rulesPath = ontologyDir
+    ? path.join(ontologyDir, 'rules.json')
+    : path.resolve(
+        process.cwd(),
+        'packages/001.lore/schemas/ontology/rules.json',
+      )
+
+  const rulesMap = new Map<string, Rule>()
+  if (fs.existsSync(rulesPath)) {
+    const raw = JSON.parse(fs.readFileSync(rulesPath, 'utf-8'))
+    for (const r of raw.rules || []) {
+      const validated = RuleSchema.parse(r)
+      rulesMap.set(validated.id, validated)
+    }
+  }
+  return rulesMap
+}
+
+export function loadOntologyAuthorizers(
+  ontologyDir?: string,
+): Map<string, Authorizer> {
+  const authPath = ontologyDir
+    ? path.join(ontologyDir, 'authorizers.json')
+    : path.resolve(
+        process.cwd(),
+        'packages/001.lore/schemas/ontology/authorizers.json',
+      )
+
+  const authMap = new Map<string, Authorizer>()
+  if (fs.existsSync(authPath)) {
+    const raw = JSON.parse(fs.readFileSync(authPath, 'utf-8'))
+    for (const a of raw.authorizers || []) {
+      const validated = AuthorizerSchema.parse(a)
+      authMap.set(validated.id, validated)
+    }
+  }
+  return authMap
+}
+
+export function validatePass2Pardons(
+  pardons: Record<string, PardonRecord>,
+  rules: Map<string, Rule>,
+  authorizers: Map<string, Authorizer>,
+  entities: {
+    characters: Record<string, any>
+    locations: Record<string, any>
+    possessions: Record<string, any>
+    grievances: Record<string, any>
+  },
+  options: { strictPardonAudit?: boolean } = {},
+): { diagnostics: PardonDiagnostic[]; appliedPardons: PardonRecord[] } {
+  const diagnostics: PardonDiagnostic[] = []
+  const appliedPardons: PardonRecord[] = []
+  const ruleUsageCounts = new Map<string, number>()
+
+  for (const [pardonId, pardon] of Object.entries(pardons)) {
+    // 1. Target Entity Foreign-Key Resolution
+    const targetId = pardon.target.entity_id
+    const targetEntity =
+      entities.characters[targetId] ||
+      entities.locations[targetId] ||
+      entities.possessions[targetId] ||
+      entities.grievances[targetId]
+
+    if (!targetEntity) {
+      throw new Error(
+        `[PASS 2 PARDON ERROR] Pardon '${pardonId}' references non-existent target entity: '${targetId}'`,
+      )
+    }
+
+    // 2. Rule Resolution & Pardonability Check
+    const rule = rules.get(pardon.rule_id)
+    if (!rule) {
+      throw new Error(
+        `[PASS 2 PARDON ERROR] Pardon '${pardonId}' references unknown rule_id: '${pardon.rule_id}'`,
+      )
+    }
+
+    if (rule.pardonable !== true) {
+      throw new Error(
+        `[PASS 2 PARDON FATAL] Illegal waiver attempted! Rule '${rule.id}' carries severity '${rule.severity_class}' ` +
+          `and is marked pardonable: false. Hard physical and epistemic invariants cannot be bypassed via pardons.`,
+      )
+    }
+
+    // 3. Authorizer Identification & Permissions
+    const authorizer = authorizers.get(pardon.authorizer_id)
+    if (!authorizer) {
+      throw new Error(
+        `[PASS 2 PARDON ERROR] Unknown authorizer '${pardon.authorizer_id}' on pardon '${pardonId}'.`,
+      )
+    }
+
+    if (!authorizer.permitted_severity_classes.includes(rule.severity_class)) {
+      throw new Error(
+        `[PASS 2 PARDON PERMISSION DENIED] Authorizer '${authorizer.name}' (${authorizer.role}) lacks authority ` +
+          `to waive severity class '${rule.severity_class}' on rule '${rule.id}'.`,
+      )
+    }
+
+    // 4. Entity-Scoped Stale Hash Verification
+    const currentEntityHash = crypto
+      .createHash('sha256')
+      .update(JSON.stringify(targetEntity).normalize('NFC'))
+      .digest('hex')
+
+    if (pardon.granted_against_entity_hash !== currentEntityHash) {
+      diagnostics.push({
+        code: 'STALE_ENTITY_PARDON',
+        pardonId,
+        message:
+          `Pardon '${pardonId}' was granted against entity hash ` +
+          `'${pardon.granted_against_entity_hash.slice(0, 8)}...', but target '${targetId}' has evolved to ` +
+          `'${currentEntityHash.slice(0, 8)}...'. Re-ratification required.`,
+      })
+    }
+
+    ruleUsageCounts.set(
+      pardon.rule_id,
+      (ruleUsageCounts.get(pardon.rule_id) || 0) + 1,
+    )
+    appliedPardons.push(pardon)
+  }
+
+  // 5. Aggregate Rule Frequency Check
+  for (const [ruleId, count] of ruleUsageCounts.entries()) {
+    const rule = rules.get(ruleId)
+    if (rule && count > rule.max_tolerated_pardon_frequency) {
+      const msg = `Rule '${ruleId}' has ${count} active waivers, exceeding its limit of ${rule.max_tolerated_pardon_frequency}.`
+      if (options.strictPardonAudit) {
+        throw new Error(`[PASS 2 PARDON FREQUENCY EXCEEDED] ${msg}`)
+      } else {
+        diagnostics.push({
+          code: 'PARDON_FREQUENCY_EXCEEDED',
+          ruleId,
+          message: msg,
+        })
+      }
+    }
+  }
+
+  return { diagnostics, appliedPardons }
 }
 
 export function compileLoreInstance(options: CompileOptions): {
@@ -21,22 +180,30 @@ export function compileLoreInstance(options: CompileOptions): {
   entityCount: number
   latestPath: string
   snapshotPath: string
+  pardonDiagnostics: PardonDiagnostic[]
 } {
-  const { instanceDir, compiledRootDir, seriesSlug } = options
+  const {
+    instanceDir,
+    compiledRootDir,
+    seriesSlug,
+    strictPardonAudit = false,
+  } = options
 
   const entities: {
     characters: Record<string, any>
     grievances: Record<string, any>
     locations: Record<string, any>
     possessions: Record<string, any>
+    pardons: Record<string, PardonRecord>
   } = {
     characters: {},
     grievances: {},
     locations: {},
     possessions: {},
+    pardons: {},
   }
 
-  // PASS 1: Boundary & Zod Validation at Byte 0
+  // PASS 1: Shape Validation
   const parseDirectory = (
     subDir: string,
     schema: any,
@@ -46,19 +213,28 @@ export function compileLoreInstance(options: CompileOptions): {
     if (!fs.existsSync(dirPath)) return
     const files = fs
       .readdirSync(dirPath)
-      .filter((f) => f.endsWith('.md') && !f.startsWith('_'))
+      .filter(
+        (f) => (f.endsWith('.md') || f.endsWith('.json')) && !f.startsWith('_'),
+      )
 
     for (const file of files) {
       const fullPath = path.join(dirPath, file)
       const raw = fs.readFileSync(fullPath, 'utf-8')
-      if (!raw.startsWith('---')) {
-        throw new Error(
-          `[PASS 1 ERROR] File ${file} does not begin with YAML frontmatter at byte 0.`,
-        )
+
+      if (file.endsWith('.json')) {
+        const json = JSON.parse(raw)
+        const validated = schema.parse(json)
+        entities[bucket][validated.id] = validated
+      } else {
+        if (!raw.startsWith('---')) {
+          throw new Error(
+            `[PASS 1 ERROR] File ${file} does not begin with YAML frontmatter at byte 0.`,
+          )
+        }
+        const parsed = matter(raw)
+        const validated = schema.parse(parsed.data)
+        entities[bucket][validated.id] = validated
       }
-      const parsed = matter(raw)
-      const validated = schema.parse(parsed.data)
-      entities[bucket][validated.id] = validated
     }
   }
 
@@ -66,19 +242,16 @@ export function compileLoreInstance(options: CompileOptions): {
   parseDirectory('grievances', GrievanceSchema, 'grievances')
   parseDirectory('locations', LocationSchema, 'locations')
   parseDirectory('possessions', PossessionSchema, 'possessions')
+  parseDirectory('pardons', PardonRecordSchema, 'pardons')
 
-  // PASS 2: Comprehensive Relational Integrity & DAG Sweeps
-
-  // 1. Audit Characters -> Locations, Possessions, Social Graph
+  // PASS 2: Relational Integrity & DAG Sweeps
   for (const [charId, character] of Object.entries(entities.characters)) {
-    // 1a. Spatial Resolution
     if (character.location && !entities.locations[character.location]) {
       throw new Error(
         `[PASS 2 ERROR] Character '${charId}' references missing location: '${character.location}'`,
       )
     }
 
-    // 1b. Logistical Equip Slots
     for (const slot of ['worn', 'held', 'carried', 'cached']) {
       for (const itemId of character.logistical?.[slot] || []) {
         if (!entities.possessions[itemId]) {
@@ -89,7 +262,6 @@ export function compileLoreInstance(options: CompileOptions): {
       }
     }
 
-    // 1c. Epistemic: strings_held_over
     for (const debtTarget of character.epistemic?.strings_held_over || []) {
       if (debtTarget === charId) {
         throw new Error(
@@ -103,7 +275,6 @@ export function compileLoreInstance(options: CompileOptions): {
       }
     }
 
-    // 1d. Epistemic: leverage_strings keys
     for (const leverageTarget of Object.keys(
       character.epistemic?.leverage_strings || {},
     )) {
@@ -119,7 +290,6 @@ export function compileLoreInstance(options: CompileOptions): {
       }
     }
 
-    // 1e. Epistemic: relationship_defaults keys
     for (const relTarget of Object.keys(
       character.epistemic?.relationship_defaults || {},
     )) {
@@ -136,7 +306,6 @@ export function compileLoreInstance(options: CompileOptions): {
     }
   }
 
-  // 2. Audit Locations -> Spatial Adjacency
   for (const [locId, location] of Object.entries(entities.locations)) {
     for (const neighborId of location.adjacent_locations || []) {
       if (neighborId === locId) {
@@ -152,9 +321,7 @@ export function compileLoreInstance(options: CompileOptions): {
     }
   }
 
-  // 3. Audit Grievances -> Participants & Escalation Trees
   for (const [grievanceId, grievance] of Object.entries(entities.grievances)) {
-    // 3a. Primary Participants
     for (const participantId of grievance.participants_primary || []) {
       if (!entities.characters[participantId]) {
         throw new Error(
@@ -163,7 +330,6 @@ export function compileLoreInstance(options: CompileOptions): {
       }
     }
 
-    // 3b. Secondary Participants (can_involve)
     for (const participantId of grievance.participants_can_involve || []) {
       if (!entities.characters[participantId]) {
         throw new Error(
@@ -172,7 +338,6 @@ export function compileLoreInstance(options: CompileOptions): {
       }
     }
 
-    // 3c. Escalation Target Existence
     for (const spawnId of grievance.spawns_on_max_escalation || []) {
       if (!entities.grievances[spawnId]) {
         throw new Error(
@@ -182,10 +347,9 @@ export function compileLoreInstance(options: CompileOptions): {
     }
   }
 
-  // 4. Cycle check on grievance escalation graph (DFS)
+  // Acyclicity check
   const visited = new Set<string>()
   const recStack = new Set<string>()
-
   const checkAcyclic = (nodeId: string) => {
     visited.add(nodeId)
     recStack.add(nodeId)
@@ -212,7 +376,32 @@ export function compileLoreInstance(options: CompileOptions): {
     }
   }
 
-  // PASS 3: Deterministic Sorting & Cryptographic Sealing
+  // PASS 2 PARDON SWEEP
+  // During tests, process.cwd() is often the monorepo root or package root
+  // We need to resolve the correct path dynamically based on import.meta.url
+  // thisFileDir is packages/001.lore/src (but URL pathname starts with /)
+  // Let's rely on standard resolution
+  let baseDir = process.cwd()
+  if (!fs.existsSync(path.join(baseDir, 'packages/001.lore/schemas/ontology/rules.json'))) {
+      if (fs.existsSync(path.join(baseDir, 'schemas/ontology/rules.json'))) {
+          // If we are already inside packages/001.lore
+          baseDir = path.resolve(baseDir, '../../')
+      }
+  }
+
+  const ontologyDir = path.resolve(
+    baseDir,
+    'packages/001.lore/schemas/ontology',
+  )
+  const rules = loadOntologyRules(ontologyDir)
+  const authorizers = loadOntologyAuthorizers(ontologyDir)
+
+  const { diagnostics: pardonDiagnostics, appliedPardons } =
+    validatePass2Pardons(entities.pardons, rules, authorizers, entities, {
+      strictPardonAudit,
+    })
+
+  // PASS 3: Sorting & Sealing
   const sortKeysRecursively = (obj: any): any => {
     if (Array.isArray(obj)) return obj.map(sortKeysRecursively)
     if (obj !== null && typeof obj === 'object') {
@@ -226,7 +415,18 @@ export function compileLoreInstance(options: CompileOptions): {
     return obj
   }
 
-  const sortedEntities = sortKeysRecursively(entities)
+  // Exclude pardons from the base state entities if empty to preserve exact zero-drift identity
+  const entitiesToSeal: Record<string, any> = {
+    characters: entities.characters,
+    grievances: entities.grievances,
+    locations: entities.locations,
+    possessions: entities.possessions,
+  }
+  if (Object.keys(entities.pardons).length > 0) {
+    entitiesToSeal.pardons = entities.pardons
+  }
+
+  const sortedEntities = sortKeysRecursively(entitiesToSeal)
   const normalizedJson = JSON.stringify(sortedEntities, null, 2).normalize(
     'NFC',
   )
@@ -235,31 +435,39 @@ export function compileLoreInstance(options: CompileOptions): {
     .update(normalizedJson)
     .digest('hex')
 
-  // Pure deterministic payload (No ambient clock leakage inside the sealed hash)
+  const metaBlock: Record<string, any> = {
+    schema_version: '1.0.0',
+    state_hash: stateHash,
+    sealed_at: 'DETERMINISTIC_PASS_3',
+  }
+
+  if (appliedPardons.length > 0) {
+    metaBlock.provenance_status = 'COMPLIANT_BY_EXEMPTION'
+    metaBlock.applied_pardons = appliedPardons.map((p) => ({
+      pardon_id: p.id,
+      rule_id: p.rule_id,
+      authorizer_id: p.authorizer_id,
+      reason: p.reason,
+    }))
+  }
+
   const canonicalArtifact = {
-    _meta: {
-      schema_version: '1.0.0',
-      state_hash: stateHash,
-      sealed_at: 'DETERMINISTIC_PASS_3',
-    },
+    _meta: metaBlock,
     ...sortedEntities,
   }
 
   const finalOutput = JSON.stringify(canonicalArtifact, null, 2).normalize(
     'NFC',
   )
-
-  // TARGET DIRECTORY: <rootDir>/compiled/<seriesSlug>/
   const targetDir = path.join(compiledRootDir, seriesSlug)
   fs.mkdirSync(targetDir, { recursive: true })
 
-  // 1. Emit Canonical Head (bible-state.json)
   const latestPath = path.join(targetDir, 'bible-state.json')
   fs.writeFileSync(latestPath, finalOutput, 'utf-8')
 
-  // 2. Emit Timestamped Snapshot (Windows-safe ISO 8601 formatting)
   const safeTimestamp = new Date().toISOString().replace(/:/g, '-')
   const snapshotPath = path.join(targetDir, `bible-state_${safeTimestamp}.json`)
+
   fs.writeFileSync(snapshotPath, finalOutput, 'utf-8')
 
   return {
@@ -271,6 +479,7 @@ export function compileLoreInstance(options: CompileOptions): {
       Object.keys(entities.possessions).length,
     latestPath,
     snapshotPath,
+    pardonDiagnostics,
   }
 }
 
@@ -288,14 +497,22 @@ if (
   const compiledRootDir = path.resolve(repoRoot, 'compiled')
 
   console.log(`>> [LORE COMPILER] Compiling series: under-the-floorboards`)
-  const { stateHash, entityCount, latestPath, snapshotPath } =
-    compileLoreInstance({
-      instanceDir,
-      compiledRootDir,
-      seriesSlug: 'under-the-floorboards',
-    })
+  const {
+    stateHash,
+    entityCount,
+    latestPath,
+    snapshotPath,
+    pardonDiagnostics,
+  } = compileLoreInstance({
+    instanceDir,
+    compiledRootDir,
+    seriesSlug: 'under-the-floorboards',
+  })
   console.log(`>> [LORE SEALED] Hash: ${stateHash}`)
   console.log(`>> [LATEST HEAD] ${latestPath}`)
   console.log(`>> [SNAPSHOT]   ${snapshotPath}`)
   console.log(`>> [ENTITIES PROCESSED] Total: ${entityCount}`)
+  if (pardonDiagnostics.length > 0) {
+    console.log(`>> [PARDON DIAGNOSTICS] Total: ${pardonDiagnostics.length}`)
+  }
 }
