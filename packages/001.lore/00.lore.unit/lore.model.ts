@@ -4,4 +4,5 @@ export class LoreModel implements Lore {
     idx: string = '001.lore'
     lastStateHash: string | null = null
     lastEntityCount: number = 0
+    lastCompileStatus: string = 'IDLE'
 }
