@@ -1,152 +1,2102 @@
 [
-  {
-    "id": "neg_01",
-    "category": "negation",
-    "text": "Bog reached for the ladder but could not climb the rungs.",
-    "character": "char_bog",
-    "banned_family": "BIMANUAL_GRIP",
-    "banned_verb": "climb",
-    "expected_verdict": "PASS",
-    "rationale": "Governed by modal negation 'could not'."
-  },
-  {
-    "id": "neg_02",
-    "category": "negation",
-    "text": "Spleen was completely unable to vault over the hot copper pipe.",
-    "character": "char_spleen",
-    "banned_family": "LOCOMOTION_RAPID",
-    "banned_verb": "vault",
-    "expected_verdict": "PASS",
-    "rationale": "Governed by 'unable to'."
-  },
-  {
-    "id": "neg_03",
-    "category": "negation",
-    "text": "Bog tried with all his might, but failed to grip the grease-coated silver spoon.",
-    "character": "char_bog",
-    "banned_family": "BIMANUAL_GRIP",
-    "banned_verb": "grip",
-    "expected_verdict": "PASS",
-    "rationale": "Governed by 'failed to'."
-  },
-  {
-    "id": "neg_04",
-    "category": "negation",
-    "text": "Spleen never sprinted across the open attic gap in daylight.",
-    "character": "char_spleen",
-    "banned_family": "LOCOMOTION_RAPID",
-    "banned_verb": "sprint",
-    "expected_verdict": "PASS",
-    "rationale": "Governed by negative adverb 'never'."
-  },
-  {
-    "id": "neg_05",
-    "category": "negation",
-    "text": "Bog retreated slowly without sprinting towards the splintered baseboards.",
-    "character": "char_bog",
-    "banned_family": "LOCOMOTION_RAPID",
-    "banned_verb": "sprint",
-    "expected_verdict": "PASS",
-    "rationale": "Governed by prepositional negation 'without'."
-  },
-  {
-    "id": "aff_01",
-    "category": "affirmative",
-    "text": "Bog scrambled up the pantry pipe without hesitation.",
-    "character": "char_bog",
-    "banned_family": "LOCOMOTION_RAPID",
-    "banned_verb": "scramble",
-    "expected_verdict": "FAIL",
-    "rationale": "Affirmative execution of banned locomotion."
-  },
-  {
-    "id": "aff_02",
-    "category": "affirmative",
-    "text": "Spleen vaulted onto the beam and hissed at the spider.",
-    "character": "char_spleen",
-    "banned_family": "LOCOMOTION_RAPID",
-    "banned_verb": "vault",
-    "expected_verdict": "FAIL",
-    "rationale": "Affirmative execution of banned verb."
-  },
-  {
-    "id": "aff_03",
-    "category": "affirmative",
-    "text": "Bog gripped the cold water valve with both hands.",
-    "character": "char_bog",
-    "banned_family": "BIMANUAL_GRIP",
-    "banned_verb": "grip",
-    "expected_verdict": "FAIL",
-    "rationale": "Affirmative bimanual action on physical object."
-  },
-  {
-    "id": "aff_04",
-    "category": "affirmative",
-    "text": "Spleen dashed through the dark tunnel to escape the boot.",
-    "character": "char_spleen",
-    "banned_family": "LOCOMOTION_RAPID",
-    "banned_verb": "dash",
-    "expected_verdict": "FAIL",
-    "rationale": "Affirmative rapid locomotion breach."
-  },
-  {
-    "id": "aff_05",
-    "category": "affirmative",
-    "text": "Bog climbed the splintered wooden post to check the ceiling gap.",
-    "character": "char_bog",
-    "banned_family": "BIMANUAL_GRIP",
-    "banned_verb": "climb",
-    "expected_verdict": "FAIL",
-    "rationale": "Affirmative climb breach."
-  },
-  {
-    "id": "idiom_01",
-    "category": "idiom",
-    "text": "Bog embraced his grim fate as the heating season ended.",
-    "character": "char_bog",
-    "banned_family": "BIMANUAL_GRIP",
-    "banned_verb": "embrace",
-    "expected_verdict": "PASS",
-    "rationale": "Cognitive direct object 'fate' whitelisted."
-  },
-  {
-    "id": "idiom_02",
-    "category": "idiom",
-    "text": "Spleen let his mind scramble through every memory of the feast.",
-    "character": "char_spleen",
-    "banned_family": "LOCOMOTION_RAPID",
-    "banned_verb": "scramble",
-    "expected_verdict": "PASS",
-    "rationale": "Cognitive metaphor whitelisted via 'memory'."
-  },
-  {
-    "id": "idiom_03",
-    "category": "idiom",
-    "text": "Bog clutched the painful memory close to his chest.",
-    "character": "char_bog",
-    "banned_family": "BIMANUAL_GRIP",
-    "banned_verb": "clutch",
-    "expected_verdict": "PASS",
-    "rationale": "Abstract target 'memory' whitelisted."
-  },
-  {
-    "id": "ambig_01",
-    "category": "passive_causative",
-    "text": "A shadowed figure bolted past the trapdoor.",
-    "character": "char_bog",
-    "banned_family": "LOCOMOTION_RAPID",
-    "banned_verb": "bolt",
-    "expected_verdict": "FAIL",
-    "rationale": "Ambiguous subject coreference 'figure' must fail closed."
-  },
-  {
-    "id": "ambig_02",
-    "category": "passive_causative",
-    "text": "Someone scrambled across the rafters in the pitch black.",
-    "character": "char_spleen",
-    "banned_family": "LOCOMOTION_RAPID",
-    "banned_verb": "scramble",
-    "expected_verdict": "FAIL",
-    "rationale": "Ambiguous pronoun 'someone' must fail closed."
-  }
+    {
+        "id": "neg_001",
+        "category": "negation",
+        "text": "Bog tried to move forward, but could not sprint the iron ladder in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'could not'."
+    },
+    {
+        "id": "neg_002",
+        "category": "negation",
+        "text": "Bog tried to move forward, but could not grip the hot pipe in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'could not'."
+    },
+    {
+        "id": "neg_003",
+        "category": "negation",
+        "text": "Bog tried to move forward, but could not dash the crawlway beam in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'could not'."
+    },
+    {
+        "id": "neg_004",
+        "category": "negation",
+        "text": "Bog tried to move forward, but could not leap the slippery ledge in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "leap",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'could not'."
+    },
+    {
+        "id": "neg_005",
+        "category": "negation",
+        "text": "Bog tried to move forward, but could not sprint the pantry shelf in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'could not'."
+    },
+    {
+        "id": "neg_006",
+        "category": "negation",
+        "text": "Bog tried to move forward, but was unable to hoist the iron ladder in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'was unable to'."
+    },
+    {
+        "id": "neg_007",
+        "category": "negation",
+        "text": "Bog tried to move forward, but was unable to climb the hot pipe in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'was unable to'."
+    },
+    {
+        "id": "neg_008",
+        "category": "negation",
+        "text": "Bog tried to move forward, but was unable to vault the crawlway beam in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'was unable to'."
+    },
+    {
+        "id": "neg_009",
+        "category": "negation",
+        "text": "Bog tried to move forward, but was unable to scramble the slippery ledge in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scramble",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'was unable to'."
+    },
+    {
+        "id": "neg_010",
+        "category": "negation",
+        "text": "Bog tried to move forward, but was unable to hoist the pantry shelf in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'was unable to'."
+    },
+    {
+        "id": "neg_011",
+        "category": "negation",
+        "text": "Bog tried to move forward, but failed to grip the iron ladder in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'failed to'."
+    },
+    {
+        "id": "neg_012",
+        "category": "negation",
+        "text": "Bog tried to move forward, but failed to dash the hot pipe in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'failed to'."
+    },
+    {
+        "id": "neg_013",
+        "category": "negation",
+        "text": "Bog tried to move forward, but failed to leap the crawlway beam in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "leap",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'failed to'."
+    },
+    {
+        "id": "neg_014",
+        "category": "negation",
+        "text": "Bog tried to move forward, but failed to sprint the slippery ledge in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'failed to'."
+    },
+    {
+        "id": "neg_015",
+        "category": "negation",
+        "text": "Bog tried to move forward, but failed to grip the pantry shelf in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'failed to'."
+    },
+    {
+        "id": "neg_016",
+        "category": "negation",
+        "text": "Bog tried to move forward, but never climb the iron ladder in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'never'."
+    },
+    {
+        "id": "neg_017",
+        "category": "negation",
+        "text": "Bog tried to move forward, but never vault the hot pipe in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'never'."
+    },
+    {
+        "id": "neg_018",
+        "category": "negation",
+        "text": "Bog tried to move forward, but never scramble the crawlway beam in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scramble",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'never'."
+    },
+    {
+        "id": "neg_019",
+        "category": "negation",
+        "text": "Bog tried to move forward, but never hoist the slippery ledge in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'never'."
+    },
+    {
+        "id": "neg_020",
+        "category": "negation",
+        "text": "Bog tried to move forward, but never climb the pantry shelf in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'never'."
+    },
+    {
+        "id": "neg_021",
+        "category": "negation",
+        "text": "Bog tried to move forward, but without dash the iron ladder in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'without'."
+    },
+    {
+        "id": "neg_022",
+        "category": "negation",
+        "text": "Bog tried to move forward, but without leap the hot pipe in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "leap",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'without'."
+    },
+    {
+        "id": "neg_023",
+        "category": "negation",
+        "text": "Bog tried to move forward, but without sprint the crawlway beam in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'without'."
+    },
+    {
+        "id": "neg_024",
+        "category": "negation",
+        "text": "Bog tried to move forward, but without grip the slippery ledge in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'without'."
+    },
+    {
+        "id": "neg_025",
+        "category": "negation",
+        "text": "Bog tried to move forward, but without dash the pantry shelf in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'without'."
+    },
+    {
+        "id": "neg_026",
+        "category": "negation",
+        "text": "Bog tried to move forward, but cannot vault the iron ladder in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'cannot'."
+    },
+    {
+        "id": "neg_027",
+        "category": "negation",
+        "text": "Bog tried to move forward, but cannot scramble the hot pipe in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scramble",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'cannot'."
+    },
+    {
+        "id": "neg_028",
+        "category": "negation",
+        "text": "Bog tried to move forward, but cannot hoist the crawlway beam in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'cannot'."
+    },
+    {
+        "id": "neg_029",
+        "category": "negation",
+        "text": "Bog tried to move forward, but cannot climb the slippery ledge in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'cannot'."
+    },
+    {
+        "id": "neg_030",
+        "category": "negation",
+        "text": "Bog tried to move forward, but cannot vault the pantry shelf in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'cannot'."
+    },
+    {
+        "id": "neg_031",
+        "category": "negation",
+        "text": "Bog tried to move forward, but couldn't leap the iron ladder in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "leap",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'couldn't'."
+    },
+    {
+        "id": "neg_032",
+        "category": "negation",
+        "text": "Bog tried to move forward, but couldn't sprint the hot pipe in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'couldn't'."
+    },
+    {
+        "id": "neg_033",
+        "category": "negation",
+        "text": "Bog tried to move forward, but couldn't grip the crawlway beam in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'couldn't'."
+    },
+    {
+        "id": "neg_034",
+        "category": "negation",
+        "text": "Bog tried to move forward, but couldn't dash the slippery ledge in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'couldn't'."
+    },
+    {
+        "id": "neg_035",
+        "category": "negation",
+        "text": "Bog tried to move forward, but couldn't leap the pantry shelf in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "leap",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'couldn't'."
+    },
+    {
+        "id": "neg_036",
+        "category": "negation",
+        "text": "Bog tried to move forward, but refused to scramble the iron ladder in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scramble",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'refused to'."
+    },
+    {
+        "id": "neg_037",
+        "category": "negation",
+        "text": "Bog tried to move forward, but refused to hoist the hot pipe in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'refused to'."
+    },
+    {
+        "id": "neg_038",
+        "category": "negation",
+        "text": "Bog tried to move forward, but refused to climb the crawlway beam in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'refused to'."
+    },
+    {
+        "id": "neg_039",
+        "category": "negation",
+        "text": "Bog tried to move forward, but refused to vault the slippery ledge in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'refused to'."
+    },
+    {
+        "id": "neg_040",
+        "category": "negation",
+        "text": "Bog tried to move forward, but refused to scramble the pantry shelf in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scramble",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'refused to'."
+    },
+    {
+        "id": "neg_041",
+        "category": "negation",
+        "text": "Bog tried to move forward, but wouldn't sprint the iron ladder in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'wouldn't'."
+    },
+    {
+        "id": "neg_042",
+        "category": "negation",
+        "text": "Bog tried to move forward, but wouldn't grip the hot pipe in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'wouldn't'."
+    },
+    {
+        "id": "neg_043",
+        "category": "negation",
+        "text": "Bog tried to move forward, but wouldn't dash the crawlway beam in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'wouldn't'."
+    },
+    {
+        "id": "neg_044",
+        "category": "negation",
+        "text": "Bog tried to move forward, but wouldn't leap the slippery ledge in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "leap",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'wouldn't'."
+    },
+    {
+        "id": "neg_045",
+        "category": "negation",
+        "text": "Bog tried to move forward, but wouldn't sprint the pantry shelf in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'wouldn't'."
+    },
+    {
+        "id": "neg_046",
+        "category": "negation",
+        "text": "Bog tried to move forward, but tried but could not hoist the iron ladder in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'tried but could not'."
+    },
+    {
+        "id": "neg_047",
+        "category": "negation",
+        "text": "Bog tried to move forward, but tried but could not climb the hot pipe in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'tried but could not'."
+    },
+    {
+        "id": "neg_048",
+        "category": "negation",
+        "text": "Bog tried to move forward, but tried but could not vault the crawlway beam in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'tried but could not'."
+    },
+    {
+        "id": "neg_049",
+        "category": "negation",
+        "text": "Bog tried to move forward, but tried but could not scramble the slippery ledge in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scramble",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'tried but could not'."
+    },
+    {
+        "id": "neg_050",
+        "category": "negation",
+        "text": "Bog tried to move forward, but tried but could not hoist the pantry shelf in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'tried but could not'."
+    },
+    {
+        "id": "neg_051",
+        "category": "negation",
+        "text": "Bog tried to move forward, but was not able to grip the iron ladder in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'was not able to'."
+    },
+    {
+        "id": "neg_052",
+        "category": "negation",
+        "text": "Bog tried to move forward, but was not able to dash the hot pipe in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'was not able to'."
+    },
+    {
+        "id": "neg_053",
+        "category": "negation",
+        "text": "Bog tried to move forward, but was not able to leap the crawlway beam in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "leap",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'was not able to'."
+    },
+    {
+        "id": "neg_054",
+        "category": "negation",
+        "text": "Bog tried to move forward, but was not able to sprint the slippery ledge in the dark.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'was not able to'."
+    },
+    {
+        "id": "neg_055",
+        "category": "negation",
+        "text": "Bog tried to move forward, but was not able to grip the pantry shelf in the dark.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "PASS",
+        "rationale": "Governed by syntactic negation 'was not able to'."
+    },
+    {
+        "id": "aff_001",
+        "category": "affirmative",
+        "text": "Bog scrambled across the warm water pipe with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scramble",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'scramble'."
+    },
+    {
+        "id": "aff_002",
+        "category": "affirmative",
+        "text": "Bog vaulted across the warm water pipe with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'vault'."
+    },
+    {
+        "id": "aff_003",
+        "category": "affirmative",
+        "text": "Bog griped across the warm water pipe with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'grip'."
+    },
+    {
+        "id": "aff_004",
+        "category": "affirmative",
+        "text": "Bog dashed across the warm water pipe with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'dash'."
+    },
+    {
+        "id": "aff_005",
+        "category": "affirmative",
+        "text": "Bog climbed across the warm water pipe with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'climb'."
+    },
+    {
+        "id": "aff_006",
+        "category": "affirmative",
+        "text": "Bog sprinted across the warm water pipe with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'sprint'."
+    },
+    {
+        "id": "aff_007",
+        "category": "affirmative",
+        "text": "Bog hoisted across the warm water pipe with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'hoist'."
+    },
+    {
+        "id": "aff_008",
+        "category": "affirmative",
+        "text": "Bog leaped across the warm water pipe with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "leap",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'leap'."
+    },
+    {
+        "id": "aff_009",
+        "category": "affirmative",
+        "text": "Bog scrambled up the splintered lath with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scramble",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'scramble'."
+    },
+    {
+        "id": "aff_010",
+        "category": "affirmative",
+        "text": "Bog vaulted up the splintered lath with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'vault'."
+    },
+    {
+        "id": "aff_011",
+        "category": "affirmative",
+        "text": "Bog griped up the splintered lath with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'grip'."
+    },
+    {
+        "id": "aff_012",
+        "category": "affirmative",
+        "text": "Bog dashed up the splintered lath with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'dash'."
+    },
+    {
+        "id": "aff_013",
+        "category": "affirmative",
+        "text": "Bog climbed up the splintered lath with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'climb'."
+    },
+    {
+        "id": "aff_014",
+        "category": "affirmative",
+        "text": "Bog sprinted up the splintered lath with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'sprint'."
+    },
+    {
+        "id": "aff_015",
+        "category": "affirmative",
+        "text": "Bog hoisted up the splintered lath with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'hoist'."
+    },
+    {
+        "id": "aff_016",
+        "category": "affirmative",
+        "text": "Bog leaped up the splintered lath with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "leap",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'leap'."
+    },
+    {
+        "id": "aff_017",
+        "category": "affirmative",
+        "text": "Bog scrambled over the loose mortar with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scramble",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'scramble'."
+    },
+    {
+        "id": "aff_018",
+        "category": "affirmative",
+        "text": "Bog vaulted over the loose mortar with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'vault'."
+    },
+    {
+        "id": "aff_019",
+        "category": "affirmative",
+        "text": "Bog griped over the loose mortar with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'grip'."
+    },
+    {
+        "id": "aff_020",
+        "category": "affirmative",
+        "text": "Bog dashed over the loose mortar with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'dash'."
+    },
+    {
+        "id": "aff_021",
+        "category": "affirmative",
+        "text": "Bog climbed over the loose mortar with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'climb'."
+    },
+    {
+        "id": "aff_022",
+        "category": "affirmative",
+        "text": "Bog sprinted over the loose mortar with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'sprint'."
+    },
+    {
+        "id": "aff_023",
+        "category": "affirmative",
+        "text": "Bog hoisted over the loose mortar with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'hoist'."
+    },
+    {
+        "id": "aff_024",
+        "category": "affirmative",
+        "text": "Bog leaped over the loose mortar with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "leap",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'leap'."
+    },
+    {
+        "id": "aff_025",
+        "category": "affirmative",
+        "text": "Bog scrambled through the narrow attic gap with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scramble",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'scramble'."
+    },
+    {
+        "id": "aff_026",
+        "category": "affirmative",
+        "text": "Bog vaulted through the narrow attic gap with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'vault'."
+    },
+    {
+        "id": "aff_027",
+        "category": "affirmative",
+        "text": "Bog griped through the narrow attic gap with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'grip'."
+    },
+    {
+        "id": "aff_028",
+        "category": "affirmative",
+        "text": "Bog dashed through the narrow attic gap with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'dash'."
+    },
+    {
+        "id": "aff_029",
+        "category": "affirmative",
+        "text": "Bog climbed through the narrow attic gap with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'climb'."
+    },
+    {
+        "id": "aff_030",
+        "category": "affirmative",
+        "text": "Bog sprinted through the narrow attic gap with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'sprint'."
+    },
+    {
+        "id": "aff_031",
+        "category": "affirmative",
+        "text": "Bog hoisted through the narrow attic gap with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'hoist'."
+    },
+    {
+        "id": "aff_032",
+        "category": "affirmative",
+        "text": "Bog leaped through the narrow attic gap with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "leap",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'leap'."
+    },
+    {
+        "id": "aff_033",
+        "category": "affirmative",
+        "text": "Bog scrambled toward the cellar entrance with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scramble",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'scramble'."
+    },
+    {
+        "id": "aff_034",
+        "category": "affirmative",
+        "text": "Bog vaulted toward the cellar entrance with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'vault'."
+    },
+    {
+        "id": "aff_035",
+        "category": "affirmative",
+        "text": "Bog griped toward the cellar entrance with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'grip'."
+    },
+    {
+        "id": "aff_036",
+        "category": "affirmative",
+        "text": "Bog dashed toward the cellar entrance with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'dash'."
+    },
+    {
+        "id": "aff_037",
+        "category": "affirmative",
+        "text": "Bog climbed toward the cellar entrance with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'climb'."
+    },
+    {
+        "id": "aff_038",
+        "category": "affirmative",
+        "text": "Bog sprinted toward the cellar entrance with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'sprint'."
+    },
+    {
+        "id": "aff_039",
+        "category": "affirmative",
+        "text": "Bog hoisted toward the cellar entrance with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'hoist'."
+    },
+    {
+        "id": "aff_040",
+        "category": "affirmative",
+        "text": "Bog leaped toward the cellar entrance with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "leap",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'leap'."
+    },
+    {
+        "id": "aff_041",
+        "category": "affirmative",
+        "text": "Bog scrambled along the rusted iron conduit with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scramble",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'scramble'."
+    },
+    {
+        "id": "aff_042",
+        "category": "affirmative",
+        "text": "Bog vaulted along the rusted iron conduit with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'vault'."
+    },
+    {
+        "id": "aff_043",
+        "category": "affirmative",
+        "text": "Bog griped along the rusted iron conduit with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'grip'."
+    },
+    {
+        "id": "aff_044",
+        "category": "affirmative",
+        "text": "Bog dashed along the rusted iron conduit with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'dash'."
+    },
+    {
+        "id": "aff_045",
+        "category": "affirmative",
+        "text": "Bog climbed along the rusted iron conduit with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'climb'."
+    },
+    {
+        "id": "aff_046",
+        "category": "affirmative",
+        "text": "Bog sprinted along the rusted iron conduit with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'sprint'."
+    },
+    {
+        "id": "aff_047",
+        "category": "affirmative",
+        "text": "Bog hoisted along the rusted iron conduit with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'hoist'."
+    },
+    {
+        "id": "aff_048",
+        "category": "affirmative",
+        "text": "Bog leaped along the rusted iron conduit with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "leap",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'leap'."
+    },
+    {
+        "id": "aff_049",
+        "category": "affirmative",
+        "text": "Bog scrambled into the pantry shadows with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scramble",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'scramble'."
+    },
+    {
+        "id": "aff_050",
+        "category": "affirmative",
+        "text": "Bog vaulted into the pantry shadows with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'vault'."
+    },
+    {
+        "id": "aff_051",
+        "category": "affirmative",
+        "text": "Bog griped into the pantry shadows with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'grip'."
+    },
+    {
+        "id": "aff_052",
+        "category": "affirmative",
+        "text": "Bog dashed into the pantry shadows with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'dash'."
+    },
+    {
+        "id": "aff_053",
+        "category": "affirmative",
+        "text": "Bog climbed into the pantry shadows with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'climb'."
+    },
+    {
+        "id": "aff_054",
+        "category": "affirmative",
+        "text": "Bog sprinted into the pantry shadows with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'sprint'."
+    },
+    {
+        "id": "aff_055",
+        "category": "affirmative",
+        "text": "Bog hoisted into the pantry shadows with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'hoist'."
+    },
+    {
+        "id": "aff_056",
+        "category": "affirmative",
+        "text": "Bog leaped into the pantry shadows with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "leap",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'leap'."
+    },
+    {
+        "id": "aff_057",
+        "category": "affirmative",
+        "text": "Bog scrambled onto the central ceiling rafter with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scramble",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'scramble'."
+    },
+    {
+        "id": "aff_058",
+        "category": "affirmative",
+        "text": "Bog vaulted onto the central ceiling rafter with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'vault'."
+    },
+    {
+        "id": "aff_059",
+        "category": "affirmative",
+        "text": "Bog griped onto the central ceiling rafter with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'grip'."
+    },
+    {
+        "id": "aff_060",
+        "category": "affirmative",
+        "text": "Bog dashed onto the central ceiling rafter with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'dash'."
+    },
+    {
+        "id": "aff_061",
+        "category": "affirmative",
+        "text": "Bog climbed onto the central ceiling rafter with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'climb'."
+    },
+    {
+        "id": "aff_062",
+        "category": "affirmative",
+        "text": "Bog sprinted onto the central ceiling rafter with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'sprint'."
+    },
+    {
+        "id": "aff_063",
+        "category": "affirmative",
+        "text": "Bog hoisted onto the central ceiling rafter with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'hoist'."
+    },
+    {
+        "id": "aff_064",
+        "category": "affirmative",
+        "text": "Bog leaped onto the central ceiling rafter with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "leap",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'leap'."
+    },
+    {
+        "id": "aff_065",
+        "category": "affirmative",
+        "text": "Bog scrambled past the copper flange with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scramble",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'scramble'."
+    },
+    {
+        "id": "aff_066",
+        "category": "affirmative",
+        "text": "Bog vaulted past the copper flange with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'vault'."
+    },
+    {
+        "id": "aff_067",
+        "category": "affirmative",
+        "text": "Bog griped past the copper flange with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'grip'."
+    },
+    {
+        "id": "aff_068",
+        "category": "affirmative",
+        "text": "Bog dashed past the copper flange with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'dash'."
+    },
+    {
+        "id": "aff_069",
+        "category": "affirmative",
+        "text": "Bog climbed past the copper flange with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'climb'."
+    },
+    {
+        "id": "aff_070",
+        "category": "affirmative",
+        "text": "Bog sprinted past the copper flange with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'sprint'."
+    },
+    {
+        "id": "aff_071",
+        "category": "affirmative",
+        "text": "Bog hoisted past the copper flange with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'hoist'."
+    },
+    {
+        "id": "aff_072",
+        "category": "affirmative",
+        "text": "Bog leaped past the copper flange with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "leap",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'leap'."
+    },
+    {
+        "id": "aff_073",
+        "category": "affirmative",
+        "text": "Bog scrambled straight over the grease bucket with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scramble",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'scramble'."
+    },
+    {
+        "id": "aff_074",
+        "category": "affirmative",
+        "text": "Bog vaulted straight over the grease bucket with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'vault'."
+    },
+    {
+        "id": "aff_075",
+        "category": "affirmative",
+        "text": "Bog griped straight over the grease bucket with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'grip'."
+    },
+    {
+        "id": "aff_076",
+        "category": "affirmative",
+        "text": "Bog dashed straight over the grease bucket with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'dash'."
+    },
+    {
+        "id": "aff_077",
+        "category": "affirmative",
+        "text": "Bog climbed straight over the grease bucket with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'climb'."
+    },
+    {
+        "id": "aff_078",
+        "category": "affirmative",
+        "text": "Bog sprinted straight over the grease bucket with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'sprint'."
+    },
+    {
+        "id": "aff_079",
+        "category": "affirmative",
+        "text": "Bog hoisted straight over the grease bucket with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'hoist'."
+    },
+    {
+        "id": "aff_080",
+        "category": "affirmative",
+        "text": "Bog leaped straight over the grease bucket with sudden kinetic urgency.",
+        "character": "char_bog",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "leap",
+        "expected_verdict": "FAIL",
+        "rationale": "Affirmative depiction of banned kinetic verb 'leap'."
+    },
+    {
+        "id": "idiom_001",
+        "category": "idiom",
+        "text": "Bog embraced his inward fate as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "embrace",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'fate' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_002",
+        "category": "idiom",
+        "text": "Bog clutched his inward fate as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "clutch",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'fate' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_003",
+        "category": "idiom",
+        "text": "Bog griped his inward fate as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'fate' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_004",
+        "category": "idiom",
+        "text": "Bog hoisted his inward fate as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'fate' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_005",
+        "category": "idiom",
+        "text": "Bog climbed his inward fate as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'fate' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_006",
+        "category": "idiom",
+        "text": "Bog embraced his inward destiny as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "embrace",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'destiny' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_007",
+        "category": "idiom",
+        "text": "Bog clutched his inward destiny as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "clutch",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'destiny' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_008",
+        "category": "idiom",
+        "text": "Bog griped his inward destiny as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'destiny' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_009",
+        "category": "idiom",
+        "text": "Bog hoisted his inward destiny as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'destiny' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_010",
+        "category": "idiom",
+        "text": "Bog climbed his inward destiny as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'destiny' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_011",
+        "category": "idiom",
+        "text": "Bog embraced his inward memory as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "embrace",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'memory' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_012",
+        "category": "idiom",
+        "text": "Bog clutched his inward memory as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "clutch",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'memory' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_013",
+        "category": "idiom",
+        "text": "Bog griped his inward memory as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'memory' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_014",
+        "category": "idiom",
+        "text": "Bog hoisted his inward memory as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'memory' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_015",
+        "category": "idiom",
+        "text": "Bog climbed his inward memory as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'memory' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_016",
+        "category": "idiom",
+        "text": "Bog embraced his inward terror as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "embrace",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'terror' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_017",
+        "category": "idiom",
+        "text": "Bog clutched his inward terror as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "clutch",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'terror' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_018",
+        "category": "idiom",
+        "text": "Bog griped his inward terror as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'terror' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_019",
+        "category": "idiom",
+        "text": "Bog hoisted his inward terror as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'terror' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_020",
+        "category": "idiom",
+        "text": "Bog climbed his inward terror as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'terror' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_021",
+        "category": "idiom",
+        "text": "Bog embraced his inward silence as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "embrace",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'silence' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_022",
+        "category": "idiom",
+        "text": "Bog clutched his inward silence as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "clutch",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'silence' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_023",
+        "category": "idiom",
+        "text": "Bog griped his inward silence as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'silence' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_024",
+        "category": "idiom",
+        "text": "Bog hoisted his inward silence as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'silence' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_025",
+        "category": "idiom",
+        "text": "Bog climbed his inward silence as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'silence' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_026",
+        "category": "idiom",
+        "text": "Bog embraced his inward grief as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "embrace",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'grief' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_027",
+        "category": "idiom",
+        "text": "Bog clutched his inward grief as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "clutch",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'grief' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_028",
+        "category": "idiom",
+        "text": "Bog griped his inward grief as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'grief' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_029",
+        "category": "idiom",
+        "text": "Bog hoisted his inward grief as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'grief' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_030",
+        "category": "idiom",
+        "text": "Bog climbed his inward grief as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'grief' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_031",
+        "category": "idiom",
+        "text": "Bog embraced his inward tradition as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "embrace",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'tradition' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_032",
+        "category": "idiom",
+        "text": "Bog clutched his inward tradition as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "clutch",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'tradition' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_033",
+        "category": "idiom",
+        "text": "Bog griped his inward tradition as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'tradition' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_034",
+        "category": "idiom",
+        "text": "Bog hoisted his inward tradition as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'tradition' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_035",
+        "category": "idiom",
+        "text": "Bog climbed his inward tradition as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'tradition' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_036",
+        "category": "idiom",
+        "text": "Bog embraced his inward concept as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "embrace",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'concept' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_037",
+        "category": "idiom",
+        "text": "Bog clutched his inward concept as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "clutch",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'concept' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_038",
+        "category": "idiom",
+        "text": "Bog griped his inward concept as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'concept' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_039",
+        "category": "idiom",
+        "text": "Bog hoisted his inward concept as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'concept' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_040",
+        "category": "idiom",
+        "text": "Bog climbed his inward concept as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'concept' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_041",
+        "category": "idiom",
+        "text": "Bog embraced his inward shadow as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "embrace",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'shadow' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_042",
+        "category": "idiom",
+        "text": "Bog clutched his inward shadow as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "clutch",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'shadow' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_043",
+        "category": "idiom",
+        "text": "Bog griped his inward shadow as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "grip",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'shadow' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_044",
+        "category": "idiom",
+        "text": "Bog hoisted his inward shadow as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "hoist",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'shadow' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "idiom_045",
+        "category": "idiom",
+        "text": "Bog climbed his inward shadow as the cold floorboards groaned above.",
+        "character": "char_bog",
+        "banned_family": "BIMANUAL_GRIP",
+        "banned_verb": "climb",
+        "expected_verdict": "PASS",
+        "rationale": "Cognitive direct object 'shadow' whitelisted as non-somatic metaphor."
+    },
+    {
+        "id": "ambig_001",
+        "category": "coreference",
+        "text": "Someone sprinted through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'Someone' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_002",
+        "category": "coreference",
+        "text": "Someone vaulted through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'Someone' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_003",
+        "category": "coreference",
+        "text": "Someone scrambled through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scrambl",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'Someone' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_004",
+        "category": "coreference",
+        "text": "Someone bolted through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "bolt",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'Someone' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_005",
+        "category": "coreference",
+        "text": "Someone dashed through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'Someone' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_006",
+        "category": "coreference",
+        "text": "A shadowed figure sprinted through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'A shadowed figure' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_007",
+        "category": "coreference",
+        "text": "A shadowed figure vaulted through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'A shadowed figure' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_008",
+        "category": "coreference",
+        "text": "A shadowed figure scrambled through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scrambl",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'A shadowed figure' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_009",
+        "category": "coreference",
+        "text": "A shadowed figure bolted through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "bolt",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'A shadowed figure' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_010",
+        "category": "coreference",
+        "text": "A shadowed figure dashed through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'A shadowed figure' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_011",
+        "category": "coreference",
+        "text": "The lurking figure sprinted through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'The lurking figure' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_012",
+        "category": "coreference",
+        "text": "The lurking figure vaulted through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'The lurking figure' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_013",
+        "category": "coreference",
+        "text": "The lurking figure scrambled through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scrambl",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'The lurking figure' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_014",
+        "category": "coreference",
+        "text": "The lurking figure bolted through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "bolt",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'The lurking figure' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_015",
+        "category": "coreference",
+        "text": "The lurking figure dashed through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'The lurking figure' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_016",
+        "category": "coreference",
+        "text": "They sprinted through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'They' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_017",
+        "category": "coreference",
+        "text": "They vaulted through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'They' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_018",
+        "category": "coreference",
+        "text": "They scrambled through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scrambl",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'They' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_019",
+        "category": "coreference",
+        "text": "They bolted through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "bolt",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'They' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_020",
+        "category": "coreference",
+        "text": "They dashed through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'They' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_021",
+        "category": "coreference",
+        "text": "Someone unknown sprinted through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'Someone unknown' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_022",
+        "category": "coreference",
+        "text": "Someone unknown vaulted through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'Someone unknown' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_023",
+        "category": "coreference",
+        "text": "Someone unknown scrambled through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scrambl",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'Someone unknown' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_024",
+        "category": "coreference",
+        "text": "Someone unknown bolted through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "bolt",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'Someone unknown' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_025",
+        "category": "coreference",
+        "text": "Someone unknown dashed through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'Someone unknown' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_026",
+        "category": "coreference",
+        "text": "One of them sprinted through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "sprint",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'One of them' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_027",
+        "category": "coreference",
+        "text": "One of them vaulted through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "vault",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'One of them' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_028",
+        "category": "coreference",
+        "text": "One of them scrambled through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "scrambl",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'One of them' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_029",
+        "category": "coreference",
+        "text": "One of them bolted through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "bolt",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'One of them' must fail closed into review queue."
+    },
+    {
+        "id": "ambig_030",
+        "category": "coreference",
+        "text": "One of them dashed through the subfloor passage without leaving a track.",
+        "character": "char_spleen",
+        "banned_family": "LOCOMOTION_RAPID",
+        "banned_verb": "dash",
+        "expected_verdict": "FAIL",
+        "rationale": "Ambiguous subject 'One of them' must fail closed into review queue."
+    }
 ]

@@ -4,117 +4,121 @@ import fs from 'node:fs'
 import { LexicalVerbGate } from '../../src/linters/lexicalGate.js'
 
 interface EvalCase {
-  id: string
-  category:
-    'negation' | 'affirmative' | 'passive_causative' | 'coreference' | 'idiom'
-  text: string
-  character: string
-  banned_family: string
-  banned_verb: string
-  expected_verdict: 'PASS' | 'FAIL'
-  rationale: string
+    id: string
+    category:
+        | 'negation'
+        | 'affirmative'
+        | 'passive_causative'
+        | 'coreference'
+        | 'idiom'
+    text: string
+    character: string
+    banned_family: string
+    banned_verb: string
+    expected_verdict: 'PASS' | 'FAIL'
+    rationale: string
 }
 
 function calculateWilsonLowerBound(
-  successes: number,
-  trials: number,
-  z = 1.96,
+    successes: number,
+    trials: number,
+    z = 1.96,
 ): number {
-  if (trials === 0) return 0
-  const p = successes / trials
-  const denominator = 1 + (z * z) / trials
-  const center = p + (z * z) / (2 * trials)
-  const spread =
-    z * Math.sqrt((p * (1 - p)) / trials + (z * z) / (4 * trials * trials))
-  return (center - spread) / denominator
+    if (trials === 0) return 0
+    const p = successes / trials
+    const denominator = 1 + (z * z) / trials
+    const center = p + (z * z) / (2 * trials)
+    const spread =
+        z * Math.sqrt((p * (1 - p)) / trials + (z * z) / (4 * trials * trials))
+    return (center - spread) / denominator
 }
 
 describe('Lexical Verb Gate Statistical Calibration (evalSet.json)', () => {
-  const evalSetPath = path.resolve(
-    process.cwd(),
-    'linters/evalSet.json',
-  )
-  let evalCases: EvalCase[] = []
-  const gate = new LexicalVerbGate()
-
-  beforeAll(() => {
-    const rawCases: EvalCase[] = JSON.parse(
-      fs.readFileSync(evalSetPath, 'utf-8'),
+    const evalSetPath = fs.existsSync(
+        path.resolve(process.cwd(), 'packages/001.lore/linters/evalSet.json'),
     )
-    evalCases = [...rawCases]
+        ? path.resolve(process.cwd(), 'packages/001.lore/linters/evalSet.json')
+        : path.resolve(process.cwd(), 'linters/evalSet.json')
 
-    // Seed up to 250 items to ensure exact statistical power if file is base template
-    if (evalCases.length < 200) {
-      const baseNeg = rawCases.find((c) => c.category === 'negation')!
-      const baseAff = rawCases.find((c) => c.category === 'affirmative')!
-      // const baseIdiom = rawCases.find((c) => c.category === 'idiom')!
-      // const basePass = rawCases.find((c) => c.category === 'passive_causative')!
-
-      while (
-        evalCases.filter((c) => c.expected_verdict === 'PASS').length < 150
-      ) {
-        const id = `pad_pass_${evalCases.length}`
-        evalCases.push({
-          ...baseNeg,
-          id,
-          text: `Line ${id}: Bog could not sprint.`,
-        })
-      }
-      while (
-        evalCases.filter((c) => c.expected_verdict === 'FAIL').length < 85
-      ) {
-        const id = `pad_fail_${evalCases.length}`
-        evalCases.push({
-          ...baseAff,
-          id,
-          text: `Line ${id}: Bog ${baseAff.banned_verb}ed quickly.`,
-        })
-      }
-    }
-  })
-
-  it('enforces sample allocations across benchmark pools (N >= 200)', () => {
-    const nonBreaches = evalCases.filter((c) => c.expected_verdict === 'PASS')
-    const breaches = evalCases.filter((c) => c.expected_verdict === 'FAIL')
-
-    expect(evalCases.length).toBeGreaterThanOrEqual(200)
-    expect(nonBreaches.length).toBeGreaterThanOrEqual(120)
-    expect(breaches.length).toBeGreaterThanOrEqual(75)
-  })
-
-  it('proves aggregate non-breach precision lower bound satisfies Wilson >= 0.95', () => {
-    const nonBreachCases = evalCases.filter(
-      (c) => c.expected_verdict === 'PASS',
+    const ontologyPath = fs.existsSync(
+        path.resolve(
+            process.cwd(),
+            'packages/001.lore/schemas/ontology/verb_families.json',
+        ),
     )
-    let correct = 0
+        ? path.resolve(
+              process.cwd(),
+              'packages/001.lore/schemas/ontology/verb_families.json',
+          )
+        : path.resolve(process.cwd(), 'schemas/ontology/verb_families.json')
 
-    for (const testCase of nonBreachCases) {
-      const res = gate.lintText(
-        testCase.text,
-        testCase.character,
-        new Set([testCase.banned_verb]),
-      )
-      if (res.passed) correct++
-    }
+    let evalCases: EvalCase[] = []
+    const gate = new LexicalVerbGate(ontologyPath)
 
-    const lowerBound = calculateWilsonLowerBound(correct, nonBreachCases.length)
-    expect(lowerBound).toBeGreaterThanOrEqual(0.95)
-  })
+    beforeAll(() => {
+        expect(fs.existsSync(evalSetPath)).toBe(true)
+        // Read strictly from the static physical dataset on disk
+        evalCases = JSON.parse(fs.readFileSync(evalSetPath, 'utf-8'))
+    })
 
-  it('proves affirmative breach recall lower bound satisfies Wilson >= 0.90', () => {
-    const breachCases = evalCases.filter((c) => c.expected_verdict === 'FAIL')
-    let caught = 0
+    it('enforces physical sample allocations across benchmark pools (N >= 200 on disk)', () => {
+        const negations = evalCases.filter((c) => c.category === 'negation')
+        const affirmatives = evalCases.filter(
+            (c) => c.category === 'affirmative',
+        )
+        const idioms = evalCases.filter((c) => c.category === 'idiom')
+        const corefs = evalCases.filter(
+            (c) =>
+                c.category === 'coreference' ||
+                c.category === 'passive_causative',
+        )
 
-    for (const testCase of breachCases) {
-      const res = gate.lintText(
-        testCase.text,
-        testCase.character,
-        new Set([testCase.banned_verb]),
-      )
-      if (!res.passed || res.violations.length > 0) caught++
-    }
+        // Verify statistical sample requirements
+        expect(evalCases.length).toBeGreaterThanOrEqual(200)
+        expect(negations.length).toBeGreaterThanOrEqual(50)
+        expect(affirmatives.length).toBeGreaterThanOrEqual(75)
+        expect(idioms.length).toBeGreaterThanOrEqual(40)
+        expect(corefs.length).toBeGreaterThanOrEqual(25)
+    })
 
-    const lowerBound = calculateWilsonLowerBound(caught, breachCases.length)
-    expect(lowerBound).toBeGreaterThanOrEqual(0.9)
-  })
+    it('proves aggregate non-breach precision lower bound satisfies Wilson >= 0.95', () => {
+        const nonBreachCases = evalCases.filter(
+            (c) => c.expected_verdict === 'PASS',
+        )
+        let correct = 0
+
+        for (const testCase of nonBreachCases) {
+            const res = gate.lintText(
+                testCase.text,
+                testCase.character,
+                new Set([testCase.banned_verb]),
+            )
+            if (res.passed) correct++
+        }
+
+        const lowerBound = calculateWilsonLowerBound(
+            correct,
+            nonBreachCases.length,
+        )
+        expect(lowerBound).toBeGreaterThanOrEqual(0.95)
+    })
+
+    it('proves affirmative breach recall lower bound satisfies Wilson >= 0.90', () => {
+        const breachCases = evalCases.filter(
+            (c) => c.expected_verdict === 'FAIL',
+        )
+        let caught = 0
+
+        for (const testCase of breachCases) {
+            const res = gate.lintText(
+                testCase.text,
+                testCase.character,
+                new Set([testCase.banned_verb]),
+            )
+            if (!res.passed || res.violations.length > 0) caught++
+        }
+
+        const lowerBound = calculateWilsonLowerBound(caught, breachCases.length)
+        expect(lowerBound).toBeGreaterThanOrEqual(0.9)
+    })
 })
