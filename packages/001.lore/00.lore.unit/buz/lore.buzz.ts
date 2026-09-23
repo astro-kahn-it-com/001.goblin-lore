@@ -1,6 +1,10 @@
 import path from 'node:path'
 import fs from 'node:fs'
 import { compileLoreInstance } from '../../src/compiler.js'
+import {
+    scaffoldEntityDossier,
+    type EntityType,
+} from '../../src/scaffolder/entityBuilder.js'
 import type { LoreModel } from '../lore.model.js'
 import type LoreBit from '../fce/lore.bit.js'
 import type State from '../lore.unit.js'
@@ -20,7 +24,7 @@ export const resolveRepoRoot = (): string => {
     return process.cwd()
 }
 
-export const initLore = (cpy: LoreModel, bal: LoreBit, _ste?: State) => {
+export const initLore = (cpy: LoreModel, bal: LoreBit, __ste?: State) => {
     cpy.lastCompileStatus = 'INITIALIZED'
     if (bal?.slv) bal.slv({ lorBit: { idx: 'init-lore-success', val: 1 } })
     return cpy
@@ -33,7 +37,11 @@ export const compileLore = async (
 ) => {
     const repoRoot = resolveRepoRoot()
     const seriesSlug = (bal?.src || 'under-the-floorboards').trim()
-    const instanceDir = path.resolve(repoRoot, 'series', seriesSlug)
+    const instanceDir = path.resolve(
+        repoRoot,
+        bal?.dat?.testFixture ? 'test/fixtures' : 'series',
+        seriesSlug,
+    )
     const compiledRootDir = path.resolve(repoRoot, 'compiled')
 
     try {
@@ -114,7 +122,11 @@ export const compileLore = async (
     return cpy
 }
 
-export const auditLore = async (cpy: LoreModel, bal: LoreBit, _ste?: State) => {
+export const auditLore = async (
+    cpy: LoreModel,
+    bal: LoreBit,
+    __ste?: State,
+) => {
     const repoRoot = resolveRepoRoot()
     const seriesSlug = (bal?.src || 'under-the-floorboards').trim()
     const latestPath = path.resolve(
@@ -167,6 +179,103 @@ export const auditLore = async (cpy: LoreModel, bal: LoreBit, _ste?: State) => {
             bal.slv({
                 lorBit: {
                     idx: 'audit-lore-error',
+                    val: 0,
+                    dat: { error: err.message },
+                },
+            })
+        }
+    }
+
+    return cpy
+}
+
+export const scaffoldEntity = async (
+    cpy: LoreModel,
+    bal: LoreBit,
+    _ste?: State,
+) => {
+    const repoRoot = resolveRepoRoot()
+    const seriesSlug = (bal?.src || 'under-the-floorboards').trim()
+    const instanceDir = path.resolve(
+        repoRoot,
+        bal?.dat?.testFixture ? 'test/fixtures' : 'series',
+        seriesSlug,
+    )
+    const payload = bal?.dat || {}
+    const entityType = (payload.entityType || 'character') as EntityType
+    const entityData = payload.data || {}
+
+    try {
+        if (!fs.existsSync(instanceDir)) {
+            throw new Error(
+                `Target series directory not found: series/${seriesSlug}`,
+            )
+        }
+
+        const scaffoldRes = scaffoldEntityDossier({
+            instanceDir,
+            entityType,
+            data: entityData,
+            openEditor: false,
+        })
+
+        const lib = (global as any).LIBRARY
+        if (lib && typeof lib.hunt === 'function') {
+            await lib.hunt('[Console action] Update Console', {
+                idx: 'cns00',
+                src: `>> [CREATED] ${scaffoldRes.filePath}`,
+            })
+            if (scaffoldRes.reconciledLinks.length > 0) {
+                await lib.hunt('[Console action] Update Console', {
+                    idx: 'cns00',
+                    src: `>> [RECONCILED LINKS] Linked nodes: ${scaffoldRes.reconciledLinks.join(', ')}`,
+                })
+            }
+        }
+
+        const compileRes = compileLoreInstance({
+            instanceDir,
+            compiledRootDir: path.resolve(repoRoot, 'compiled'),
+            seriesSlug,
+        })
+
+        cpy.lastStateHash = compileRes.stateHash
+        cpy.lastEntityCount = compileRes.entityCount
+        cpy.lastCompileStatus = 'SEALED'
+
+        if (lib && typeof lib.hunt === 'function') {
+            await lib.hunt('[Console action] Update Console', {
+                idx: 'cns00',
+                src: `>> [AUTO-RESEAL] Root Hash: ${compileRes.stateHash.slice(0, 16)}...`,
+            })
+        }
+
+        if (bal?.slv) {
+            bal.slv({
+                lorBit: {
+                    idx: 'scaffold-entity-success',
+                    val: 1,
+                    dat: {
+                        scaffold: scaffoldRes,
+                        compilation: compileRes,
+                    },
+                },
+            })
+        }
+    } catch (err: any) {
+        cpy.lastCompileStatus = 'ERROR'
+        const lib = (global as any).LIBRARY
+        if (lib && typeof lib.hunt === 'function') {
+            await lib.hunt('[Console action] Update Console', {
+                idx: 'cns00',
+                src: `>> [SCAFFOLD ERROR] ${err.message}`,
+            })
+        }
+
+        if (bal?.slv) {
+            bal.slv({
+                lorBit: {
+                    idx: 'scaffold-entity-error',
                     val: 0,
                     dat: { error: err.message },
                 },
