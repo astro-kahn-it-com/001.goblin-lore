@@ -59,6 +59,7 @@ export const updateMenu = async (cpy: MenuModel, bal: MenuBit, ste: any) => {
         'INSPECT CANON BIBLE',
         'AUDIT CORPUS INTEGRITY',
         'SCAFFOLD ENTITY',
+        'INSPECT SOMATIC PROFILE',
         'ROOT MENU',
     ]
 
@@ -274,6 +275,56 @@ export const updateMenu = async (cpy: MenuModel, bal: MenuBit, ste: any) => {
                     data: scaffoldData,
                 },
             })
+            break
+        }
+
+        case 'INSPECT SOMATIC PROFILE': {
+            const repoRoot = resolveRepoRoot()
+            const headFile = path.resolve(
+                repoRoot,
+                'compiled',
+                'under-the-floorboards',
+                'bible-state.json',
+            )
+
+            let charChoices = [
+                'char_bog',
+                'char_spleen',
+                'char_wart',
+                'char_mum_grissel',
+            ]
+            if (fs.existsSync(headFile)) {
+                try {
+                    const raw = JSON.parse(fs.readFileSync(headFile, 'utf-8'))
+                    const chars = Object.keys(
+                        raw?.entities?.characters || raw?.characters || {},
+                    )
+                    if (chars.length > 0) charChoices = chars
+                } catch {}
+            }
+
+            const subChoices = [...charChoices, 'CANCEL']
+            const charGrid = await lib.hunt(UPDATE_GRID, {
+                x: 0,
+                y: 4,
+                xSpan: 4,
+                ySpan: Math.min(12, Math.max(6, subChoices.length + 2)),
+            })
+
+            const charSelection = await lib.hunt(OPEN_CHOICE, {
+                dat: { clr0: 'black', clr1: 'cyan' },
+                src: 'vertical',
+                lst: subChoices,
+                net: charGrid?.grdBit?.dat,
+            })
+
+            const chosenChar = charSelection?.chcBit?.src
+            if (chosenChar && chosenChar !== 'CANCEL') {
+                await ste.hunt(ActLor.INSPECT_SOMATIC, {
+                    src: 'under-the-floorboards',
+                    dat: { characterId: chosenChar },
+                })
+            }
             break
         }
 
