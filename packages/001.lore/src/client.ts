@@ -6,8 +6,6 @@ import {
   type Grievance,
   type Possession,
 } from '../schemas/index.js'
-// Using 'any' for World as it's not exported by the schema but requested by the spec
-type World = any;
 import {
   buildCharacterEpistemicPrompt,
   type AssembledCharacterContext,
@@ -37,7 +35,7 @@ export interface BibleStateEntities {
   locations: Record<string, Location>
   possessions: Record<string, Possession>
   grievances: Record<string, Grievance>
-  world?: World
+  world?: any
 }
 
 export interface BibleState {
@@ -135,7 +133,6 @@ export function loadBibleState(
     )
   }
 
-  // Normalize structure: support both state.entities.* and root state.* collections
   const normalized: BibleState = {
     _meta: parsed._meta,
     entities: {

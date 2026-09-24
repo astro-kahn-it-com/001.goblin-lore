@@ -5,6 +5,7 @@ import {
     scaffoldEntityDossier,
     type EntityType,
 } from '../../src/scaffolder/entityBuilder.js'
+import { loadBibleState, getCharacterSomaticMask } from '../../src/client.js'
 import type { LoreModel } from '../lore.model.js'
 import type LoreBit from '../fce/lore.bit.js'
 import type State from '../lore.unit.js'
@@ -284,4 +285,85 @@ export const scaffoldEntity = async (
     }
 
     return cpy
+}
+
+export const inspectSomatic = async (
+  cpy: LoreModel,
+  bal: LoreBit,
+  __ste?: State,
+) => {
+  const seriesSlug = (bal?.src || 'under-the-floorboards').trim()
+  const characterId = (bal?.dat?.characterId || 'char_wart').trim()
+  const lib = (global as any).LIBRARY
+
+  try {
+    const state = loadBibleState(seriesSlug)
+    const mask = getCharacterSomaticMask(state, characterId)
+
+    if (lib && typeof lib.hunt === 'function') {
+      const conditionsStr =
+        mask.conditions.length > 0 ? mask.conditions.join(', ') : 'none'
+      const limitsStr =
+        mask.motorLimitations.length > 0
+          ? mask.motorLimitations.join(', ')
+          : 'none'
+      const verbsStr =
+        mask.bannedKineticVerbs.length > 0
+          ? mask.bannedKineticVerbs.join(', ')
+          : 'none'
+
+      await lib.hunt('[Console action] Update Console', {
+        idx: 'cns00',
+        src: '==================================================',
+      })
+      await lib.hunt('[Console action] Update Console', {
+        idx: 'cns00',
+        src: `>> [SOMATIC PROJECTION] ${mask.characterId} (Gait: ${mask.locomotionBaseline})`,
+      })
+      await lib.hunt('[Console action] Update Console', {
+        idx: 'cns00',
+        src: `>> AVAILABLE ARMS: ${mask.availableArms.toFixed(1)} / 2.0 (Conditions: ${conditionsStr})`,
+      })
+      await lib.hunt('[Console action] Update Console', {
+        idx: 'cns00',
+        src: `>> MOTOR LIMITATIONS: [${limitsStr}]`,
+      })
+      await lib.hunt('[Console action] Update Console', {
+        idx: 'cns00',
+        src: `>> BANNED VERBS: ${verbsStr}`,
+      })
+      await lib.hunt('[Console action] Update Console', {
+        idx: 'cns00',
+        src: '==================================================',
+      })
+    }
+
+    if (bal?.slv) {
+      bal.slv({
+        lorBit: {
+          idx: 'inspect-somatic-success',
+          val: 1,
+          dat: mask,
+        },
+      })
+    }
+  } catch (err: any) {
+    if (lib && typeof lib.hunt === 'function') {
+      await lib.hunt('[Console action] Update Console', {
+        idx: 'cns00',
+        src: `>> [SOMATIC PROJECTION ERROR] ${err.message}`,
+      })
+    }
+    if (bal?.slv) {
+      bal.slv({
+        lorBit: {
+          idx: 'inspect-somatic-error',
+          val: 0,
+          dat: { error: err.message },
+        },
+      })
+    }
+  }
+
+  return cpy
 }
