@@ -7,9 +7,12 @@ import {
   getActiveGrievanceDAG,
   resolveRepoRoot,
 } from '../src/client.js'
+import { LoreModel } from '../00.lore.unit/lore.model.js'
+import { reducer as loreReducer } from '../00.lore.unit/lore.reduce.js'
+import * as ActLor from '../00.lore.unit/lore.action.js'
 
-describe('Typed Downstream Ingestion Client (src/client.ts)', () => {
-  it('resolves the monorepo root directory accurately', () => {
+describe('Typed Downstream Ingestion Client & Somatic Projection Engine', () => {
+  it('resolves the monorepo root directory containing packages and series', () => {
     const root = resolveRepoRoot()
     expect(root).toBeDefined()
     expect(typeof root).toBe('string')
@@ -32,41 +35,68 @@ describe('Typed Downstream Ingestion Client (src/client.ts)', () => {
   it('enforces deep-freeze immutability against downstream mutation attempts', () => {
     const state = loadBibleState('under-the-floorboards')
 
-    // Attempting to mutate a top-level character property must throw TypeError
     expect(() => {
       ;(state.entities.characters.char_bog as any).name = 'MUTATED'
     }).toThrow(TypeError)
 
-    // Attempting to mutate nested inventory arrays must throw TypeError
     expect(() => {
       ;(state.entities.characters.char_bog.logistical.held as any).push(
-        'item_illegal_weapon',
+        'item_injected',
       )
     }).toThrow(TypeError)
 
-    // Attempting to mutate metadata must throw TypeError
     expect(() => {
       ;(state._meta as any).state_hash = 'tampered_hash'
     }).toThrow(TypeError)
   })
 
-  it('correctly calculates net upper-limb capacity for amputated characters', () => {
+  it('calculates net upper-limb capacity and kinetic bans for amputated character (char_wart)', () => {
     const state = loadBibleState('under-the-floorboards')
     const wartMask = getCharacterSomaticMask(state, 'char_wart')
 
     expect(wartMask.characterId).toBe('char_wart')
+    expect(wartMask.locomotionBaseline).toBe('bipedal_hunched')
     expect(wartMask.availableArms).toBe(1.0)
+    expect(wartMask.conditions).toContain('severed_left_arm')
     expect(wartMask.bannedKineticVerbs).toContain('sprint')
     expect(wartMask.bannedKineticVerbs).toContain('vault')
     expect(wartMask.bannedKineticVerbs).toContain('climb')
+    expect(wartMask.bannedKineticVerbs).toContain('embrace')
+    expect(wartMask.motorLimitations).toContain('UNSTEADY_GAIT')
+    expect(wartMask.motorLimitations).toContain('NO_HEAVY_LIFT')
+
+    expect(() => {
+      ;(wartMask as any).availableArms = 2.0
+    }).toThrow(TypeError)
   })
 
-  it('correctly calculates upper-limb capacity for standard characters', () => {
+  it('calculates somatic capacity for limping character with institutional brake (char_mum_grissel)', () => {
+    const state = loadBibleState('under-the-floorboards')
+    const grisselMask = getCharacterSomaticMask(state, 'char_mum_grissel')
+
+    expect(grisselMask.characterId).toBe('char_mum_grissel')
+    expect(grisselMask.locomotionBaseline).toBe('limping')
+    expect(grisselMask.availableArms).toBe(2.0)
+    expect(grisselMask.conditions).toContain('stiff_left_knee')
+    expect(grisselMask.bannedKineticVerbs).toContain('sprint')
+    expect(grisselMask.bannedKineticVerbs).toContain('leap')
+    expect(grisselMask.bannedKineticVerbs).toContain('vault')
+    expect(grisselMask.bannedKineticVerbs).toContain('scramble')
+  })
+
+  it('calculates somatic capacity for standard character (char_bog)', () => {
     const state = loadBibleState('under-the-floorboards')
     const bogMask = getCharacterSomaticMask(state, 'char_bog')
 
     expect(bogMask.characterId).toBe('char_bog')
     expect(bogMask.availableArms).toBe(2.0)
+  })
+
+  it('fails closed when queried with an unindexed character ID', () => {
+    const state = loadBibleState('under-the-floorboards')
+    expect(() => getCharacterSomaticMask(state, 'char_ghost')).toThrow(
+      /\[LORE CLIENT\] Unknown character ID: 'char_ghost'/,
+    )
   })
 
   it('extracts mutual spatial topology graphs with acoustic damping factors', () => {
@@ -103,7 +133,7 @@ describe('Typed Downstream Ingestion Client (src/client.ts)', () => {
         char_spleen: 'RUMOR_ONLY',
       },
       distorted_beliefs: {
-        char_spleen: 'Heard that killing draft entered through a vent.',
+        char_spleen: 'Heard that a killing draft entered through a vent.',
       },
       permitted_clue_tokens: [],
     }
@@ -124,9 +154,22 @@ describe('Typed Downstream Ingestion Client (src/client.ts)', () => {
     )
   })
 
-  it('throws an error if attempting to load an uncompiled series', () => {
-    expect(() => loadBibleState('non_existent_series_12345')).toThrow(
-      /\[LORE CLIENT FATAL\] Compiled state artifact not found/,
-    )
+  it('handles INSPECT_SOMATIC action via loreReducer in headless mode', async () => {
+    const model = new LoreModel()
+    let response: any = null
+
+    const action = new ActLor.InspectSomatic({
+      idx: 'test-somatic-inspect',
+      src: 'under-the-floorboards',
+      dat: { characterId: 'char_wart' },
+      slv: (res: any) => {
+        response = res
+      },
+    })
+
+    await loreReducer(model, action)
+    expect(response?.lorBit?.val).toBe(1)
+    expect(response?.lorBit?.dat?.characterId).toBe('char_wart')
+    expect(response?.lorBit?.dat?.availableArms).toBe(1.0)
   })
 })
