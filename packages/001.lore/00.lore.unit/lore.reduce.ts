@@ -18,6 +18,8 @@ export function reducer(
             return Buzz.auditLore(clone(model), act.bale, state)
         case Act.SCAFFOLD_ENTITY:
             return Buzz.scaffoldEntity(clone(model), act.bale, state)
+        case Act.INSPECT_SOMATIC:
+            return Buzz.inspectSomatic(clone(model), act.bale, state)
         default:
             return model
     }
