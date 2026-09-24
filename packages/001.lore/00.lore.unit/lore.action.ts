@@ -29,4 +29,11 @@ export class ScaffoldEntity implements Action<LoreBit> {
     constructor(public bale: LoreBit) {}
 }
 
-export type Actions = InitLore | CompileLore | AuditLore | ScaffoldEntity
+export const INSPECT_SOMATIC = '[Lore action] Inspect Somatic'
+export class InspectSomatic implements Action<LoreBit> {
+    readonly type = INSPECT_SOMATIC
+    constructor(public bale: LoreBit) {}
+}
+
+export type Actions =
+    InitLore | CompileLore | AuditLore | ScaffoldEntity | InspectSomatic
