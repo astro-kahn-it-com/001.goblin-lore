@@ -12,6 +12,7 @@ const UPDATE_GRID = '[Grid action] Update Grid'
 const WRITE_CONSOLE = '[Write action] Write Console'
 const UPDATE_CONSOLE = '[Console action] Update Console'
 const OPEN_CHOICE = '[Open action] Open Choice'
+const OPEN_INPUT = '[Open action] Open Input'
 
 export const initMenu = async (cpy: MenuModel, bal: MenuBit, ste: any) => {
     if (bal?.slv != null) rootSlv = bal.slv
@@ -57,6 +58,7 @@ export const updateMenu = async (cpy: MenuModel, bal: MenuBit, ste: any) => {
         'COMPILE LORE INSTANCE',
         'INSPECT CANON BIBLE',
         'AUDIT CORPUS INTEGRITY',
+        'SCAFFOLD ENTITY',
         'ROOT MENU',
     ]
 
@@ -154,6 +156,124 @@ export const updateMenu = async (cpy: MenuModel, bal: MenuBit, ste: any) => {
 
         case 'AUDIT CORPUS INTEGRITY': {
             await ste.hunt(ActLor.AUDIT_LORE, { src: 'under-the-floorboards' })
+            break
+        }
+
+        case 'SCAFFOLD ENTITY': {
+            const entityTypes = [
+                'CHARACTER',
+                'LOCATION',
+                'GRIEVANCE',
+                'POSSESSION',
+                'CANCEL',
+            ]
+
+            const typeGrid = await lib.hunt(UPDATE_GRID, {
+                x: 0,
+                y: 4,
+                xSpan: 4,
+                ySpan: 7,
+            })
+
+            const typeChoice = await lib.hunt(OPEN_CHOICE, {
+                dat: { clr0: 'black', clr1: 'yellow' },
+                src: 'vertical',
+                lst: entityTypes,
+                net: typeGrid?.grdBit?.dat,
+            })
+
+            const chosenType = typeChoice?.chcBit?.src?.toLowerCase()
+            if (!chosenType || chosenType === 'cancel') break
+
+            const inputGrid = await lib.hunt(UPDATE_GRID, {
+                x: 0,
+                y: 4,
+                xSpan: 4,
+                ySpan: 6,
+            })
+
+            const idInput = await lib.hunt(OPEN_INPUT, {
+                dat: { clr0: 'black', clr1: 'yellow' },
+                src: 'vertical',
+                lst: [],
+                txt: `Enter Entity Slug (e.g. wart, pantry_gap):`,
+                net: inputGrid?.grdBit?.dat,
+            })
+
+            const rawSlug = idInput?.putBit?.src
+            if (!rawSlug || rawSlug.trim().length === 0) break
+
+            const cleanSlug = rawSlug
+                .trim()
+                .toLowerCase()
+                .replace(/[^a-z0-9_]/g, '_')
+            let prefix = 'char_'
+            if (chosenType === 'location') prefix = 'loc_'
+            if (chosenType === 'grievance') prefix = 'grievance_'
+            if (chosenType === 'possession') prefix = 'item_'
+
+            const entityId = `${prefix}${cleanSlug}`
+            let scaffoldData: Record<string, any> = {
+                id: entityId,
+                name: cleanSlug.replace(/_/g, ' ').toUpperCase(),
+                type: chosenType,
+            }
+
+            if (chosenType === 'character') {
+                scaffoldData = {
+                    ...scaffoldData,
+                    somatic: {
+                        locomotion_baseline: 'bipedal_hunched',
+                        banned_kinetic_verbs: ['sprint', 'vault'],
+                        motor_limitations: ['UNSTEADY_GAIT'],
+                        conditions: [],
+                        signature_tics: [],
+                    },
+                    logistical: {
+                        worn: [],
+                        held: [],
+                        carried: [],
+                        cached: [],
+                    },
+                    epistemic: {
+                        escalation_ceiling: 3,
+                        leverage_strings: {},
+                        relationship_defaults: {},
+                        strings_held_over: [],
+                    },
+                }
+            } else if (chosenType === 'location') {
+                scaffoldData = {
+                    ...scaffoldData,
+                    adjacent_locations: [],
+                    acoustic_damping_factor: 2500,
+                    lighting_level: 'dim_crevice',
+                }
+            } else if (chosenType === 'grievance') {
+                scaffoldData = {
+                    ...scaffoldData,
+                    category: 'resource_hoarding',
+                    participants_primary: ['char_bog', 'char_spleen'],
+                    intensity_floor: 1,
+                    intensity_ceiling: 4,
+                    cooldown_cycles: 2,
+                }
+            } else if (chosenType === 'possession') {
+                scaffoldData = {
+                    ...scaffoldData,
+                    weight_class: 'shine',
+                    mass_grams: 50,
+                    is_contested: false,
+                }
+            }
+
+            await ste.hunt(ActLor.SCAFFOLD_ENTITY, {
+                src: 'under-the-floorboards',
+                dat: {
+                    entityType: chosenType,
+                    data: scaffoldData,
+                },
+            })
             break
         }
 
