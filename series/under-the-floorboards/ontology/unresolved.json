@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "mysteries": [
+    {
+      "topic_id": "mystery_the_famine",
+      "title": "The Cause of the Great Winter Famine",
+      "world_status": "UNRESOLVED_BY_CANON",
+      "standing": "ACTIVE_ENDORSED",
+      "last_reconsidered_at": 0,
+      "forbidden_propositions": [
+        {
+          "statement": "The famine was deliberately caused by poison introduced to the central well.",
+          "trigger_lemma_sets": [
+            ["poison", "well"],
+            ["poisoned", "water"],
+            ["tainted", "supply", "cistern"]
+          ]
+        },
+        {
+          "statement": "The subfloor grain store was stolen by a human child.",
+          "trigger_lemma_sets": [
+            ["grain", "stolen", "human"],
+            ["child", "took", "flour"]
+          ]
+        }
+      ],
+      "permitted_clue_tokens": [
+        "bitter_ash",
+        "copper_flange",
+        "frost_scale",
+        "empty_bin"
+      ],
+      "epistemic_horizons": {
+        "char_bog": "TOTAL_IGNORANCE",
+        "char_spleen": "RUMOR_ONLY",
+        "char_wart": "FALSE_BELIEF",
+        "char_mum_grissel": "WITHHELD"
+      },
+      "distorted_beliefs": {
+        "char_spleen": "Heard whispers that an unlatched cellar vent let in a killing draft that ruined the stores.",
+        "char_wart": "Convinced the pantry elders secretly hoarded the grain sacks in the lower wall cavity."
+      },
+      "human_promotion_condition": "Showrunner must commit formal physical evidence in Season 2 Episode 10 finale."
+    }
+  ]
+}
