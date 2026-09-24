@@ -1,0 +1,54 @@
+{
+    "_meta": {
+        "schema_version": "1.0.0",
+        "state_hash": "d6d17c0149b4db0629bb5e6f039a92ca6cf16323d21b13d27ddac7424a349ceb",
+        "sealed_at": "DETERMINISTIC_PASS_3",
+        "epistemic_manifest": [
+            {
+                "topic_id": "mystery_the_famine",
+                "standing": "ACTIVE_ENDORSED",
+                "world_status": "UNRESOLVED_BY_CANON",
+                "applied_horizons": {}
+            }
+        ]
+    },
+    "characters": {
+        "char_bog": {
+            "epistemic": {
+                "escalation_ceiling": 3,
+                "leverage_strings": {},
+                "relationship_defaults": {},
+                "strings_held_over": []
+            },
+            "historical_reference": false,
+            "id": "char_bog",
+            "logistical": {
+                "cached": [],
+                "carried": [],
+                "held": [],
+                "worn": []
+            },
+            "name": "Bog",
+            "somatic": {
+                "banned_kinetic_verbs": [],
+                "conditions": [],
+                "locomotion_baseline": "bipedal_standard",
+                "motor_limitations": [],
+                "signature_tics": []
+            },
+            "type": "character"
+        }
+    },
+    "grievances": {},
+    "locations": {
+        "loc_pantry_notch": {
+            "acoustic_damping_factor": 1800,
+            "adjacent_locations": [],
+            "id": "loc_pantry_notch",
+            "lighting_level": "pitch_black",
+            "name": "Pantry Notch",
+            "type": "location"
+        }
+    },
+    "possessions": {}
+}
